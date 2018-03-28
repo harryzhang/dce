@@ -26,7 +26,7 @@ public class TokenUtil {
 	public static boolean checkToken(String uri, Integer userId, String ts, String sign) {
 		// TODO 先屏蔽测试
 		// if (true)
-		// return true;
+		// return true; 
 
 		long currentTime = System.currentTimeMillis();
 		long requestTime = Long.valueOf(ts);
