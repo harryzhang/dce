@@ -1,5 +1,7 @@
 package com.dce.business.dao.order;
 
+import java.util.Map;
+
 import com.dce.business.entity.order.OrderDo;
 
 public interface IOrderDao {
@@ -14,4 +16,6 @@ public interface IOrderDao {
     int updateByPrimaryKeySelective(OrderDo record);
 
     int updateByPrimaryKey(OrderDo record);
+    
+    void updateOrderStatusByOldStatus(Map<String, Object> paraMap);
 }

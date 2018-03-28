@@ -212,4 +212,18 @@
            </if>
         </trim> 
     </select>
+    
+    <update id="updateOrderStatusByOldStatus" parameterType="Map">
+        UPDATE ct_order
+        <trim prefix="SET" suffixOverrides=","> 
+            <if test="newStatus != null">  
+                    orderStatus = #{newStatus},
+            </if>
+            <if test="matchOrderId != null">  
+                    matchOrderId = #{matchOrderId},
+            </if>   
+        </trim> 
+        
+        WHERE orderId = #{orderId}  and orderStatus = #{oldStatus}
+    </update>   
 </mapper>

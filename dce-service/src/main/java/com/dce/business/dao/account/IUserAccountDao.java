@@ -19,4 +19,6 @@ public interface IUserAccountDao {
     int updateByPrimaryKey(UserAccountDo record);
 
     List<UserAccountDo> selectAccount(Map<String, Object> params);
+
+    int updateUserAmountById(UserAccountDo bizUserAccountDo);
 }

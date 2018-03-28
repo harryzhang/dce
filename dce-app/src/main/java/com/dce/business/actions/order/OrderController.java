@@ -90,9 +90,9 @@ public class OrderController extends BaseController {
         OrderDo newOrder = new OrderDo();
         newOrder.setCreateTime(new Date());
         newOrder.setGoodsId(matchOrder.getGoodsId());
-        newOrder.setOrderStatus(2);
+        newOrder.setOrderStatus(1);
         newOrder.setQty(matchOrder.getQty());
-        newOrder.setPayStatus(0);
+        newOrder.setPayStatus(1);
         newOrder.setUserId(userId);
         newOrder.setOrderType(matchOrder.getOrderType().intValue() == 1 ? 2 : 1);
         newOrder.setPrice(matchOrder.getPrice());

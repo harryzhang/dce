@@ -32,6 +32,8 @@ public class UserAccountDo {
 
     private Date updateTime;
 
+    private String remark;
+
     public Integer getId() {
         return id;
     }
@@ -142,5 +144,13 @@ public class UserAccountDo {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

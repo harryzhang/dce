@@ -181,31 +181,69 @@
 		set userId = #{userId,jdbcType=INTEGER},
 		accountType = #{accountType,jdbcType=VARCHAR},
 		amount = #{amount,jdbcType=DECIMAL},
-		originalAmount = #{originalAmount,jdbcType=DECIMAL},
+		originalAmount =
+		#{originalAmount,jdbcType=DECIMAL},
 		pointAmount = #{pointAmount,jdbcType=DECIMAL},
-		scoreAmount = #{scoreAmount,jdbcType=DECIMAL},
+		scoreAmount =
+		#{scoreAmount,jdbcType=DECIMAL},
 		frozenDeposit = #{frozenDeposit,jdbcType=DECIMAL},
-		totalConsumeAmount = #{totalConsumeAmount,jdbcType=DECIMAL},
+		totalConsumeAmount =
+		#{totalConsumeAmount,jdbcType=DECIMAL},
 		totalInocmeAmount = #{totalInocmeAmount,jdbcType=DECIMAL},
-		incomeAmount = #{incomeAmount,jdbcType=DECIMAL},
+		incomeAmount =
+		#{incomeAmount,jdbcType=DECIMAL},
 		consumeAmount = #{consumeAmount,jdbcType=DECIMAL},
-		withdrawTotalDeposit = #{withdrawTotalDeposit,jdbcType=VARCHAR},
+		withdrawTotalDeposit =
+		#{withdrawTotalDeposit,jdbcType=VARCHAR},
 		updateTime = #{updateTime,jdbcType=TIMESTAMP}
-		where id = #{id,jdbcType=INTEGER}
+		where id =
+		#{id,jdbcType=INTEGER}
 	</update>
-	
+
 	<!-- 自定义查询 -->
-    <select id="selectAccount" parameterType="java.util.Map" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List" />
-        from ct_user_account
-        <trim prefix="WHERE" prefixOverrides="AND |OR "> 
-           <if test="userId != null">  
-               AND userId = #{userId}
-           </if>
-           <if test="accountType != null">  
-               AND accountType = #{accountType}
-           </if>
-        </trim> 
-    </select>
+	<select id="selectAccount" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ct_user_account
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="userId != null">
+				AND userId = #{userId}
+			</if>
+			<if test="accountType != null">
+				AND accountType = #{accountType}
+			</if>
+		</trim>
+	</select>
+
+	<update id="updateUserAmountById" parameterType="com.dce.business.entity.account.UserAccountDo">
+		UPDATE ct_user_account
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="amount != null">
+				amount = ifnull(amount,0) + #{amount},
+			</if>
+
+			<if test="amount != null">
+				totalConsumeAmount = ifnull(totalConsumeAmount,0) + #{amount},
+			</if>
+			<if test="totalInocmeAmount != null">
+				totalInocmeAmount = ifnull(totalInocmeAmount,0) + #{totalInocmeAmount},
+			</if>
+			<if test="incomeAmount != null">
+				incomeAmount = ifnull(incomeAmount,0) + #{incomeAmount},
+			</if>
+			<if test="frozenDeposit != null">
+				frozenDeposit = ifnull(frozenDeposit,0) + #{frozenDeposit},
+			</if>
+			<if test="consumeAmount != null">
+				consumeAmount = ifnull(consumeAmount,0) + #{consumeAmount},
+			</if>
+			<if test="withdrawTotalDeposit != null">
+				withdrawTotalDeposit = ifnull(withdrawTotalDeposit,0) + #{withdrawTotalDeposit},
+			</if>
+			<if test="userId != null">
+				updateTime = now(),
+			</if>
+		</trim>
+		WHERE userId = #{userId} and accountType=#{accountType} and (ifnull(amount,0) + #{amount})>=0
+	</update>
 </mapper>

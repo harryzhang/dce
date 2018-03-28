@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.dce.business.dao.account.IUserAccountDetailDao">
+	<resultMap type="com.dce.business.entity.account.UserAccountDetailDo" id="userAccountDetailResultMap">
+		<result property="id" column="id" />
+		<result property="userId" column="userId" />
+		<result property="amount" column="amount" />
+		<result property="moreOrLess" column="moreOrLess" />
+		<result property="incomeType" column="incomeType" />
+		<result property="createTime" column="createTime" />
+		<result property="accountType" column="accountType" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+	<select id="getById" parameterType="Long" resultMap="userAccountDetailResultMap">
+		SELECT * 
+		  FROM t_user_account_detail WHERE id = #{id}
+	</select>
+
+	<select id="selectUserAccountDetail" parameterType="Map" resultMap="userAccountDetailResultMap">
+		SELECT * 
+		  FROM t_user_account_detail
+		  <trim prefix="WHERE" prefixOverrides="AND |OR "> 
+			<if test="id != null">  
+				AND id = #{id}
+			</if>
+			<if test="userId != null">  
+				AND userId = #{userId}
+			</if>
+			<if test="amount != null">  
+				AND amount = #{amount}
+			</if>
+			<if test="moreOrLess != null">  
+				AND moreOrLess = #{moreOrLess}
+			</if>
+			<if test="incomeType != null">  
+				AND incomeType = #{incomeType}
+			</if>
+			<if test="accountType != null">  
+				AND accountType = #{accountType}
+			</if>
+			<if test="remark != null">  
+				AND remark = #{remark}
+			</if>
+			<if test="createTime != null">  
+				AND date_format(createTime,'%Y-%m-%d') = #{createTime}
+			</if>
+			
+         </trim> 
+			order by createTime desc
+	</select>
+	
+	<select id="selectUserTransPoint" parameterType="Map" resultType="BigDecimal">
+		SELECT sum(ifnull(amount,0)) as amount
+		  FROM t_user_account_detail
+		  where userId = #{userId}		        
+		        AND accountType = 'point'
+			
+			<if test="startDate != null"> 
+			    <![CDATA[ 
+				AND createTime  >= #{startDate}
+				]]>
+			</if>
+			<if test="endDate != null"> 
+			    <![CDATA[ 
+				AND createTime  < #{endDate}
+				]]>
+			</if>
+	</select>
+	
+	<select id="selectLastTransPoint" parameterType="Map" resultType="Map">
+		SELECT * 
+		  FROM t_user_account_point_log
+		  where userId =  #{userId}		 
+			order by createTime desc
+		limit 1
+	</select>
+	
+	
+	<update id="updateUserAccountDetailById" parameterType="com.dce.business.entity.account.UserAccountDetailDo">
+		UPDATE t_user_account_detail 
+		<trim prefix="SET" suffixOverrides=","> 
+		<if test="userId != null">  
+				userId = #{userId},
+		</if>				
+		<if test="amount != null">  
+				amount = #{amount},
+		</if>				
+		<if test="moreOrLess != null">  
+				moreOrLess = #{moreOrLess},
+		</if>				
+		<if test="incomeType != null">  
+				incomeType = #{incomeType},
+		</if>				
+		<if test="createTime != null">  
+				createTime = #{createTime},
+		</if>				
+		<if test="accountType != null">  
+				accountType = #{accountType},
+		</if>				
+		<if test="remark != null">  
+				remark = #{remark},
+		</if>				
+		</trim>
+		WHERE id = #{id} 
+	</update>	
+	
+	<insert id="addUserAccountDetail" parameterType="com.dce.business.entity.account.UserAccountDetailDo" keyProperty="id"
+		useGeneratedKeys="true" >
+		INSERT INTO t_user_account_detail(		userId
+		,amount
+		,moreOrLess
+		,incomeType
+		,createTime
+		,accountType
+		,remark
+)
+		     VALUES (		#{userId}
+		,#{amount}
+		,#{moreOrLess}
+		,#{incomeType}
+		,#{createTime}
+		,#{accountType}
+		,#{remark}
+)
+	</insert>
+	
+	
+	<insert id="insertPointTranRec" parameterType="Map"  >
+		INSERT INTO  t_user_account_point_log(
+	        endDate,
+	        createTime,
+	        userId,
+	        totalPoint,
+	        tranPoint
+	        )
+    	VALUES(
+	       #{endDate},
+	        now(),
+	        #{userId},
+	        #{totalPoint},
+	        #{tranPoint}
+	    	)
+	</insert>
+	
+	<insert id="insertPointTranRecJjd" parameterType="Map"  >
+		INSERT INTO  t_user_account_jjd_log(
+	        endDate,
+	        createTime,
+	        userId,
+	        totalPoint,
+	        tranPoint,
+	        optType
+	        )
+    	VALUES(
+	        now(),
+	        now(),
+	        #{userId},
+	        #{totalPoint},
+	        #{tranPoint},
+	        #{optType}
+	    	)
+	</insert>
+	
+	
+	
+	<delete id="deleteById" parameterType="Long" >
+		DELETE FROM t_user_account_detail WHERE id = #{id}
+	</delete>
+	
+</mapper>
+
