@@ -2,6 +2,7 @@ package com.dce.business.service.impl.order;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -42,7 +43,7 @@ public class OrderServiceImpl implements IOrderService {
         OrderDo newOrder = new OrderDo();
         newOrder.setCreateTime(new Date());
         newOrder.setGoodsId(matchOrder.getGoodsId());
-        newOrder.setOrderStatus(1);
+        newOrder.setOrderStatus(2);
         newOrder.setQty(matchOrder.getQty());
         newOrder.setPayStatus(1);
         newOrder.setUserId(userId);
@@ -74,5 +75,10 @@ public class OrderServiceImpl implements IOrderService {
             accountService.convertBetweenAccount(newOrder.getUserId(), matchOrder.getUserId(), newOrder.getQty(),
                     AccountType.current.getAccountType(), AccountType.current.getAccountType(), AccountMsg.type_1, AccountMsg.type_1);
         }
+    }
+
+    @Override
+    public List<OrderDo> selectOrder(Map<String, Object> params) {
+        return orderDao.selectOrder(params);
     }
 }

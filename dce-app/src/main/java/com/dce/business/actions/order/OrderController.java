@@ -3,6 +3,9 @@ package com.dce.business.actions.order;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -92,5 +95,22 @@ public class OrderController extends BaseController {
         orderService.matchOrder(userId, matchOrder);
 
         return Result.successResult("成功", orderId);
+    }
+
+    /** 
+     * 我的订单列表
+     * @return  
+     */
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public Result<?> list() {
+        Integer userId = getUserId();
+        String type = getString("type"); //类型：0-全部；1-待交易；2-交易中；3--已完成
+
+        Assert.hasText(type, "查询订单列表类型不能为空");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        List<OrderDo> list = orderService.selectOrder(params);
+        return Result.successResult("成功", list);
     }
 }
