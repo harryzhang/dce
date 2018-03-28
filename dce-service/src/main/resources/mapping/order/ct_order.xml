@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dce.business.dao.order.IOrderDao">
+	<resultMap id="BaseResultMap" type="com.dce.business.entity.order.OrderDo">
+		<id column="orderId" jdbcType="BIGINT" property="orderId" />
+		<result column="orderCode" jdbcType="VARCHAR" property="orderCode" />
+		<result column="userId" jdbcType="BIGINT" property="userId" />
+		<result column="goodsId" jdbcType="BIGINT" property="goodsId" />
+		<result column="qty" jdbcType="BIGINT" property="qty" />
+		<result column="price" jdbcType="DECIMAL" property="price" />
+		<result column="totalPrice" jdbcType="DECIMAL" property="totalPrice" />
+		<result column="recAddress" jdbcType="VARCHAR" property="recAddress" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="orderStatus" jdbcType="INTEGER" property="orderStatus" />
+		<result column="payStatus" jdbcType="INTEGER" property="payStatus" />
+		<result column="payTime" jdbcType="TIMESTAMP" property="payTime" />
+		<result column="orderType" jdbcType="INTEGER" property="orderType" />
+		<result column="matchOrderId" jdbcType="BIGINT" property="matchOrderId" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		orderId, orderCode, userId, goodsId, qty, price, totalPrice, recAddress, createTime,
+		orderStatus, payStatus,
+		payTime, orderType, matchOrderId
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ct_order
+		where orderId = #{orderId,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from ct_order
+		where orderId = #{orderId,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" keyColumn="orderId" keyProperty="orderId" parameterType="com.dce.business.entity.order.OrderDo"
+		useGeneratedKeys="true">
+		insert into ct_order (orderCode, userId, goodsId,
+		qty, price, totalPrice,
+		recAddress, createTime,
+		orderStatus,
+		payStatus, payTime, orderType,
+		matchOrderId)
+		values (#{orderCode,jdbcType=VARCHAR},
+		#{userId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT},
+		#{qty,jdbcType=BIGINT}, #{price,jdbcType=DECIMAL},
+		#{totalPrice,jdbcType=DECIMAL},
+		#{recAddress,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{orderStatus,jdbcType=INTEGER},
+		#{payStatus,jdbcType=INTEGER}, #{payTime,jdbcType=TIMESTAMP},
+		#{orderType,jdbcType=INTEGER},
+		#{matchOrderId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" keyColumn="orderId" keyProperty="orderId" parameterType="com.dce.business.entity.order.OrderDo"
+		useGeneratedKeys="true">
+		insert into ct_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="orderCode != null">
+				orderCode,
+			</if>
+			<if test="userId != null">
+				userId,
+			</if>
+			<if test="goodsId != null">
+				goodsId,
+			</if>
+			<if test="qty != null">
+				qty,
+			</if>
+			<if test="price != null">
+				price,
+			</if>
+			<if test="totalPrice != null">
+				totalPrice,
+			</if>
+			<if test="recAddress != null">
+				recAddress,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="orderStatus != null">
+				orderStatus,
+			</if>
+			<if test="payStatus != null">
+				payStatus,
+			</if>
+			<if test="payTime != null">
+				payTime,
+			</if>
+			<if test="orderType != null">
+				orderType,
+			</if>
+			<if test="matchOrderId != null">
+				matchOrderId,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="orderCode != null">
+				#{orderCode,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsId != null">
+				#{goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="qty != null">
+				#{qty,jdbcType=BIGINT},
+			</if>
+			<if test="price != null">
+				#{price,jdbcType=DECIMAL},
+			</if>
+			<if test="totalPrice != null">
+				#{totalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="recAddress != null">
+				#{recAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="orderStatus != null">
+				#{orderStatus,jdbcType=INTEGER},
+			</if>
+			<if test="payStatus != null">
+				#{payStatus,jdbcType=INTEGER},
+			</if>
+			<if test="payTime != null">
+				#{payTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="orderType != null">
+				#{orderType,jdbcType=INTEGER},
+			</if>
+			<if test="matchOrderId != null">
+				#{matchOrderId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.dce.business.entity.order.OrderDo">
+		update ct_order
+		<set>
+			<if test="orderCode != null">
+				orderCode = #{orderCode,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				userId = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsId != null">
+				goodsId = #{goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="qty != null">
+				qty = #{qty,jdbcType=BIGINT},
+			</if>
+			<if test="price != null">
+				price = #{price,jdbcType=DECIMAL},
+			</if>
+			<if test="totalPrice != null">
+				totalPrice = #{totalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="recAddress != null">
+				recAddress = #{recAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="orderStatus != null">
+				orderStatus = #{orderStatus,jdbcType=INTEGER},
+			</if>
+			<if test="payStatus != null">
+				payStatus = #{payStatus,jdbcType=INTEGER},
+			</if>
+			<if test="payTime != null">
+				payTime = #{payTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="orderType != null">
+				orderType = #{orderType,jdbcType=INTEGER},
+			</if>
+			<if test="matchOrderId != null">
+				matchOrderId = #{matchOrderId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where orderId = #{orderId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.dce.business.entity.order.OrderDo">
+		update ct_order
+		set orderCode = #{orderCode,jdbcType=VARCHAR},
+		userId = #{userId,jdbcType=BIGINT},
+		goodsId = #{goodsId,jdbcType=BIGINT},
+		qty = #{qty,jdbcType=BIGINT},
+		price =
+		#{price,jdbcType=DECIMAL},
+		totalPrice = #{totalPrice,jdbcType=DECIMAL},
+		recAddress = #{recAddress,jdbcType=VARCHAR},
+		createTime = #{createTime,jdbcType=TIMESTAMP},
+		orderStatus = #{orderStatus,jdbcType=INTEGER},
+		payStatus =
+		#{payStatus,jdbcType=INTEGER},
+		payTime = #{payTime,jdbcType=TIMESTAMP},
+		orderType = #{orderType,jdbcType=INTEGER},
+		matchOrderId = #{matchOrderId,jdbcType=BIGINT}
+		where orderId = #{orderId,jdbcType=BIGINT}
+	</update>
+	
+	<!-- 自定义查询 -->
+    <select id="selectOrder" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ct_order
+        <trim prefix="WHERE" prefixOverrides="AND |OR "> 
+           <if test="userId != null">  
+               AND userId = #{userId}
+           </if>
+        </trim> 
+    </select>
+</mapper>

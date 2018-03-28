@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dce.business.dao.trade.ITradeMarketDao">
+	<resultMap id="BaseResultMap" type="com.dce.business.entity.trade.TradeMarketDo">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="latestPrice" jdbcType="DECIMAL" property="latestprice" />
+		<result column="lowestPrice" jdbcType="DECIMAL" property="lowestprice" />
+		<result column="highestPrice" jdbcType="DECIMAL" property="highestprice" />
+		<result column="feeRate" jdbcType="DECIMAL" property="feerate" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, latestPrice, lowestPrice, highestPrice, feeRate
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ct_trade_market
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from ct_trade_market
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.dce.business.entity.trade.TradeMarketDo"
+		useGeneratedKeys="true">
+		insert into ct_trade_market (latestPrice, lowestPrice, highestPrice,
+		feeRate)
+		values (#{latestprice,jdbcType=DECIMAL}, #{lowestprice,jdbcType=DECIMAL}, #{highestprice,jdbcType=DECIMAL},
+		#{feerate,jdbcType=DECIMAL})
+	</insert>
+	<insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.dce.business.entity.trade.TradeMarketDo"
+		useGeneratedKeys="true">
+		insert into ct_trade_market
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="latestprice != null">
+				latestPrice,
+			</if>
+			<if test="lowestprice != null">
+				lowestPrice,
+			</if>
+			<if test="highestprice != null">
+				highestPrice,
+			</if>
+			<if test="feerate != null">
+				feeRate,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="latestprice != null">
+				#{latestprice,jdbcType=DECIMAL},
+			</if>
+			<if test="lowestprice != null">
+				#{lowestprice,jdbcType=DECIMAL},
+			</if>
+			<if test="highestprice != null">
+				#{highestprice,jdbcType=DECIMAL},
+			</if>
+			<if test="feerate != null">
+				#{feerate,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.dce.business.entity.trade.TradeMarketDo">
+		update ct_trade_market
+		<set>
+			<if test="latestprice != null">
+				latestPrice = #{latestprice,jdbcType=DECIMAL},
+			</if>
+			<if test="lowestprice != null">
+				lowestPrice = #{lowestprice,jdbcType=DECIMAL},
+			</if>
+			<if test="highestprice != null">
+				highestPrice = #{highestprice,jdbcType=DECIMAL},
+			</if>
+			<if test="feerate != null">
+				feeRate = #{feerate,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.dce.business.entity.trade.TradeMarketDo">
+		update ct_trade_market
+		set latestPrice = #{latestprice,jdbcType=DECIMAL},
+		lowestPrice = #{lowestprice,jdbcType=DECIMAL},
+		highestPrice = #{highestprice,jdbcType=DECIMAL},
+		feeRate = #{feerate,jdbcType=DECIMAL}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 自定义查询 -->
+    <select id="selectTradeMarket" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ct_trade_market
+        limit 1; 
+    </select>
+</mapper>

@@ -1,0 +1,9 @@
+*.settings/
+*.metadata/
+*.iml
+*/target/
+*.project
+*.classPath
+*/.project
+*/.classPath
+*.launch
