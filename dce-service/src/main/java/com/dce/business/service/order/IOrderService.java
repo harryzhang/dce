@@ -12,6 +12,6 @@ public interface IOrderService {
     
     OrderDo getOrderDo(Long orderId);
     
-    void matchOrder(OrderDo newOrderDo);
+    void matchOrder(Integer userId, OrderDo matchOrderDo);
 }
 

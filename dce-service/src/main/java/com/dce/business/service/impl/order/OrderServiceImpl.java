@@ -1,5 +1,6 @@
 package com.dce.business.service.impl.order;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,14 +10,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.dce.business.common.enums.AccountMsg;
+import com.dce.business.common.enums.AccountType;
 import com.dce.business.dao.order.IOrderDao;
 import com.dce.business.entity.order.OrderDo;
+import com.dce.business.service.account.IAccountService;
 import com.dce.business.service.order.IOrderService;
 
 @Service("orderService")
 public class OrderServiceImpl implements IOrderService {
     @Resource
     private IOrderDao orderDao;
+    @Resource
+    private IAccountService accountService;
 
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
@@ -32,17 +38,41 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public void matchOrder(OrderDo newOrderDo) {
-        addOrder(newOrderDo);
+    public void matchOrder(Integer userId, OrderDo matchOrder) {
+        OrderDo newOrder = new OrderDo();
+        newOrder.setCreateTime(new Date());
+        newOrder.setGoodsId(matchOrder.getGoodsId());
+        newOrder.setOrderStatus(1);
+        newOrder.setQty(matchOrder.getQty());
+        newOrder.setPayStatus(1);
+        newOrder.setUserId(userId);
+        newOrder.setOrderType(matchOrder.getOrderType().intValue() == 1 ? 2 : 1);
+        newOrder.setPrice(matchOrder.getPrice());
+        newOrder.setTotalPrice(matchOrder.getTotalPrice());
+        newOrder.setOrderCode(matchOrder.getOrderCode());
+        newOrder.setMatchOrderId(matchOrder.getOrderId());
+        addOrder(newOrder);
+
         Map<String, Object> paraMap = new HashMap<String, Object>();
         paraMap.put("newStatus", 2);
         paraMap.put("oldStatus", 1);
-        paraMap.put("matchOrderId", newOrderDo.getOrderId());
-        paraMap.put("orderId", newOrderDo.getMatchOrderId());
+        paraMap.put("matchOrderId", newOrder.getOrderId());
+        paraMap.put("orderId", newOrder.getMatchOrderId());
         //更改匹配的订单状态为交易中
         orderDao.updateOrderStatusByOldStatus(paraMap);
-        
-        //TODO 添加账户变更消息
-        
+
+        //更新账户金额
+        Integer orderType = newOrder.getOrderType(); //如果是买，则购买者减少美元点账户，添加币账户
+        if (orderType == 1) {
+            accountService.convertBetweenAccount(newOrder.getUserId(), matchOrder.getUserId(), newOrder.getTotalPrice(),
+                    AccountType.point.getAccountType(), AccountType.point.getAccountType(), AccountMsg.type_1, AccountMsg.type_1);
+            accountService.convertBetweenAccount(matchOrder.getUserId(), newOrder.getUserId(), newOrder.getQty(),
+                    AccountType.current.getAccountType(), AccountType.current.getAccountType(), AccountMsg.type_1, AccountMsg.type_1);
+        } else {
+            accountService.convertBetweenAccount(matchOrder.getUserId(), newOrder.getUserId(), newOrder.getTotalPrice(),
+                    AccountType.point.getAccountType(), AccountType.point.getAccountType(), AccountMsg.type_1, AccountMsg.type_1);
+            accountService.convertBetweenAccount(newOrder.getUserId(), matchOrder.getUserId(), newOrder.getQty(),
+                    AccountType.current.getAccountType(), AccountType.current.getAccountType(), AccountMsg.type_1, AccountMsg.type_1);
+        }
     }
 }

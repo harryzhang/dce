@@ -20,6 +20,6 @@ public interface IAccountService {
 
     int updateUserAmountById(UserAccountDo bizUserAccountDo, AccountMsg type);
 
-    void convertBetweenAccount(Integer sourceUserId, Integer targetUserId, BigDecimal qty, String fromAccount, String toAccount, AccountMsg sourceMsg,
+    void convertBetweenAccount(Integer sourceUserId, Integer targetUserId, BigDecimal amount, String fromAccount, String toAccount, AccountMsg sourceMsg,
             AccountMsg targetMsg);
 }

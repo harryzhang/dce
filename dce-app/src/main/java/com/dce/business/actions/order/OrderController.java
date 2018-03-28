@@ -48,6 +48,7 @@ public class OrderController extends BaseController {
 
         OrderDo orderDo = new OrderDo();
         orderDo.setOrderCode(OrderCodeUtil.genOrderCode(userId));
+        orderDo.setOrderType(Integer.valueOf(orderType));
         orderDo.setUserId(userId);
         orderDo.setPrice(new BigDecimal(price));
         orderDo.setQty(new BigDecimal(qty));
@@ -74,6 +75,7 @@ public class OrderController extends BaseController {
 
         //不能给自己匹配
         Assert.isTrue(userId.intValue() != matchOrder.getUserId().intValue(), "不能匹配自己挂的单");
+        Assert.isTrue(matchOrder.getPayStatus() == 0, "订单已被匹配");
 
         //买单,计算账号余额
         if (matchOrder.getOrderType().intValue() == 2) {
@@ -87,19 +89,7 @@ public class OrderController extends BaseController {
             Assert.isTrue(canBuy, "账号余额不足");
         }
 
-        OrderDo newOrder = new OrderDo();
-        newOrder.setCreateTime(new Date());
-        newOrder.setGoodsId(matchOrder.getGoodsId());
-        newOrder.setOrderStatus(1);
-        newOrder.setQty(matchOrder.getQty());
-        newOrder.setPayStatus(1);
-        newOrder.setUserId(userId);
-        newOrder.setOrderType(matchOrder.getOrderType().intValue() == 1 ? 2 : 1);
-        newOrder.setPrice(matchOrder.getPrice());
-        newOrder.setTotalPrice(matchOrder.getTotalPrice());
-        newOrder.setOrderCode(matchOrder.getOrderCode());
-        newOrder.setMatchOrderId(matchOrder.getOrderId());
-        orderService.matchOrder(newOrder);
+        orderService.matchOrder(userId, matchOrder);
 
         return Result.successResult("成功", orderId);
     }

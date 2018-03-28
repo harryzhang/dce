@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.dce.business.common.enums.AccountMsg;
+import com.dce.business.common.exception.BusinessException;
 import com.dce.business.dao.account.IUserAccountDao;
 import com.dce.business.dao.account.IUserAccountDetailDao;
 import com.dce.business.entity.account.UserAccountDetailDo;
@@ -89,6 +90,7 @@ public class AccountServiceImpl implements IAccountService {
         //判断用户是否存在此帐户 没有刚增加
         UserAccountDo udo = selectUserAccount(userId, accountType);
         int result = 0;
+        bizUserAccountDo.setUpdateTime(new Date());
         if (null == udo && amount.compareTo(BigDecimal.ZERO) >= 0) {
             result = userAccountDao.insertSelective(bizUserAccountDo);
         } else {
@@ -96,7 +98,7 @@ public class AccountServiceImpl implements IAccountService {
         }
 
         if (result < 1) {
-            throw new RuntimeException("余额不足");
+            throw new BusinessException("余额不足");
         }
 
         updateUserAmountDetail(amount, type, userId, accountType, bizUserAccountDo.getRemark());
@@ -133,18 +135,18 @@ public class AccountServiceImpl implements IAccountService {
 
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public void convertBetweenAccount(Integer sourceUserId, Integer targetUserId, BigDecimal qty, String fromAccount, String toAccount,
+    public void convertBetweenAccount(Integer sourceUserId, Integer targetUserId, BigDecimal amount, String fromAccount, String toAccount,
             AccountMsg sourceMsg, AccountMsg targetMsg) {
 
         UserAccountDo source = new UserAccountDo();
         source.setUserId(sourceUserId);
-        source.setAmount(qty.negate());
+        source.setAmount(amount.negate());
         source.setAccountType(fromAccount);
         this.updateUserAmountById(source, sourceMsg);
 
         UserAccountDo target = new UserAccountDo();
         target.setUserId(targetUserId);
-        target.setAmount(qty);
+        target.setAmount(amount);
         target.setAccountType(toAccount);
         this.updateUserAmountById(target, targetMsg);
 

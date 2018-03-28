@@ -15,12 +15,12 @@
 
 	<select id="getById" parameterType="Long" resultMap="userAccountDetailResultMap">
 		SELECT * 
-		  FROM t_user_account_detail WHERE id = #{id}
+		  FROM ct_user_account_detail WHERE id = #{id}
 	</select>
 
 	<select id="selectUserAccountDetail" parameterType="Map" resultMap="userAccountDetailResultMap">
 		SELECT * 
-		  FROM t_user_account_detail
+		  FROM ct_user_account_detail
 		  <trim prefix="WHERE" prefixOverrides="AND |OR "> 
 			<if test="id != null">  
 				AND id = #{id}
@@ -53,7 +53,7 @@
 	
 	<select id="selectUserTransPoint" parameterType="Map" resultType="BigDecimal">
 		SELECT sum(ifnull(amount,0)) as amount
-		  FROM t_user_account_detail
+		  FROM ct_user_account_detail
 		  where userId = #{userId}		        
 		        AND accountType = 'point'
 			
@@ -79,7 +79,7 @@
 	
 	
 	<update id="updateUserAccountDetailById" parameterType="com.dce.business.entity.account.UserAccountDetailDo">
-		UPDATE t_user_account_detail 
+		UPDATE ct_user_account_detail 
 		<trim prefix="SET" suffixOverrides=","> 
 		<if test="userId != null">  
 				userId = #{userId},
@@ -108,7 +108,7 @@
 	
 	<insert id="addUserAccountDetail" parameterType="com.dce.business.entity.account.UserAccountDetailDo" keyProperty="id"
 		useGeneratedKeys="true" >
-		INSERT INTO t_user_account_detail(		userId
+		INSERT INTO ct_user_account_detail(		userId
 		,amount
 		,moreOrLess
 		,incomeType
@@ -166,7 +166,7 @@
 	
 	
 	<delete id="deleteById" parameterType="Long" >
-		DELETE FROM t_user_account_detail WHERE id = #{id}
+		DELETE FROM ct_user_account_detail WHERE id = #{id}
 	</delete>
 	
 </mapper>

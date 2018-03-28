@@ -12,7 +12,7 @@ public final class OrderCodeUtil {
      */
     public static String genOrderCode(Integer userId) {
         StringBuffer sb = new StringBuffer("DCE");
-        sb.append(userId).append(DateUtil.dateToString(new Date())).append(random());
+        sb.append(userId).append(DateUtil.YYYYMMDDHHMMSS.format(new Date())).append(random());
         return sb.toString();
     }
 
