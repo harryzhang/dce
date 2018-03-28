@@ -203,6 +203,9 @@
            <if test="userId != null">  
                AND userId = #{userId}
            </if>
+           <if test="accountType != null">  
+               AND accountType = #{accountType}
+           </if>
         </trim> 
     </select>
 </mapper>

@@ -8,11 +8,11 @@ public class OrderDo {
 
     private String orderCode;
 
-    private Long userId;
+    private Integer userId;
 
     private Long goodsId;
 
-    private Long qty;
+    private BigDecimal qty;
 
     private BigDecimal price;
 
@@ -48,11 +48,11 @@ public class OrderDo {
         this.orderCode = orderCode;
     }
 
-    public Long getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -64,11 +64,11 @@ public class OrderDo {
         this.goodsId = goodsId;
     }
 
-    public Long getQty() {
+    public BigDecimal getQty() {
         return qty;
     }
 
-    public void setQty(Long qty) {
+    public void setQty(BigDecimal qty) {
         this.qty = qty;
     }
 

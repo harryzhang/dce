@@ -13,5 +13,5 @@ public interface IAccountService {
     
     UserAccountDo getUserAccount(Integer userId);
     
-    
+    UserAccountDo selectUserAccount(Integer userId, String accountType);
 }

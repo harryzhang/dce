@@ -48,6 +48,19 @@ public class AccountServiceImpl implements IAccountService {
 
         return list.get(0);
     }
-    
+
     //1、原始仓账户；2、美元点账户
+    @Override
+    public UserAccountDo selectUserAccount(Integer userId, String accountType) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("accountType", accountType);
+
+        List<UserAccountDo> list = userAccountDao.selectAccount(params);
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+
+        return list.get(0);
+    }
 }

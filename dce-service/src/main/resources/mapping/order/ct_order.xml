@@ -4,9 +4,9 @@
 	<resultMap id="BaseResultMap" type="com.dce.business.entity.order.OrderDo">
 		<id column="orderId" jdbcType="BIGINT" property="orderId" />
 		<result column="orderCode" jdbcType="VARCHAR" property="orderCode" />
-		<result column="userId" jdbcType="BIGINT" property="userId" />
+		<result column="userId" jdbcType="INTEGER" property="userId" />
 		<result column="goodsId" jdbcType="BIGINT" property="goodsId" />
-		<result column="qty" jdbcType="BIGINT" property="qty" />
+		<result column="qty" jdbcType="DECIMAL" property="qty" />
 		<result column="price" jdbcType="DECIMAL" property="price" />
 		<result column="totalPrice" jdbcType="DECIMAL" property="totalPrice" />
 		<result column="recAddress" jdbcType="VARCHAR" property="recAddress" />
@@ -41,8 +41,8 @@
 		payStatus, payTime, orderType,
 		matchOrderId)
 		values (#{orderCode,jdbcType=VARCHAR},
-		#{userId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT},
-		#{qty,jdbcType=BIGINT}, #{price,jdbcType=DECIMAL},
+		#{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=BIGINT},
+		#{qty,jdbcType=DECIMAL}, #{price,jdbcType=DECIMAL},
 		#{totalPrice,jdbcType=DECIMAL},
 		#{recAddress,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
 		#{orderStatus,jdbcType=INTEGER},
@@ -99,13 +99,13 @@
 				#{orderCode,jdbcType=VARCHAR},
 			</if>
 			<if test="userId != null">
-				#{userId,jdbcType=BIGINT},
+				#{userId,jdbcType=INTEGER},
 			</if>
 			<if test="goodsId != null">
 				#{goodsId,jdbcType=BIGINT},
 			</if>
 			<if test="qty != null">
-				#{qty,jdbcType=BIGINT},
+				#{qty,jdbcType=DECIMAL},
 			</if>
 			<if test="price != null">
 				#{price,jdbcType=DECIMAL},
@@ -143,13 +143,13 @@
 				orderCode = #{orderCode,jdbcType=VARCHAR},
 			</if>
 			<if test="userId != null">
-				userId = #{userId,jdbcType=BIGINT},
+				userId = #{userId,jdbcType=INTEGER},
 			</if>
 			<if test="goodsId != null">
 				goodsId = #{goodsId,jdbcType=BIGINT},
 			</if>
 			<if test="qty != null">
-				qty = #{qty,jdbcType=BIGINT},
+				qty = #{qty,jdbcType=DECIMAL},
 			</if>
 			<if test="price != null">
 				price = #{price,jdbcType=DECIMAL},
@@ -184,9 +184,9 @@
 	<update id="updateByPrimaryKey" parameterType="com.dce.business.entity.order.OrderDo">
 		update ct_order
 		set orderCode = #{orderCode,jdbcType=VARCHAR},
-		userId = #{userId,jdbcType=BIGINT},
+		userId = #{userId,jdbcType=INTEGER},
 		goodsId = #{goodsId,jdbcType=BIGINT},
-		qty = #{qty,jdbcType=BIGINT},
+		qty = #{qty,jdbcType=DECIMAL},
 		price =
 		#{price,jdbcType=DECIMAL},
 		totalPrice = #{totalPrice,jdbcType=DECIMAL},
