@@ -152,7 +152,7 @@ public class AccountServiceImpl implements IAccountService {
 
     }
 
-    public String moreOrLessStr(BigDecimal amount) {
+    private String moreOrLessStr(BigDecimal amount) {
         String type = "+";
         if (BigDecimal.ZERO.compareTo(amount) > 0) {
             type = "-";
@@ -160,5 +160,10 @@ public class AccountServiceImpl implements IAccountService {
 
         return type;
 
+    }
+
+    @Override
+    public List<UserAccountDetailDo> selectUserAccountDetail(Map<String, Object> params) {
+        return userAccountDetailDao.selectUserAccountDetail(params);
     }
 }

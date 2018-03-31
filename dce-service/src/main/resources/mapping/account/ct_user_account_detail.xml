@@ -46,7 +46,12 @@
 			<if test="createTime != null">  
 				AND date_format(createTime,'%Y-%m-%d') = #{createTime}
 			</if>
-			
+			<if test="startTime != null">  
+			    <![CDATA[AND createTime >= str_to_date(#{startTime},'%Y-%m-%d %H') ]]>
+            </if>
+            <if test="endTime != null">  
+                <![CDATA[AND createTime <= str_to_date(#{endTime},'%Y-%m-%d %H') ]]>
+            </if>
          </trim> 
 			order by createTime desc
 	</select>

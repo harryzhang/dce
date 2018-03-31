@@ -210,6 +210,9 @@
            <if test="userId != null">  
                AND userId = #{userId}
            </if>
+           <if test="orderStatus != null">  
+               AND orderStatus = #{orderStatus}
+           </if>
         </trim> 
     </select>
     

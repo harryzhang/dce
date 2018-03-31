@@ -110,6 +110,12 @@ public class OrderController extends BaseController {
 
         Map<String, Object> params = new HashMap<>();
         params.put("userId", userId);
+        if ("1".equals(type)) {
+            params.put("orderStatus", "1");
+        } else if ("3".equals(type)) {
+            params.put("orderStatus", "2");
+        }
+
         List<OrderDo> list = orderService.selectOrder(params);
         return Result.successResult("成功", list);
     }

@@ -43,8 +43,8 @@ public class LoginFilter extends OncePerRequestFilter {
             Assert.notNull(ts, "用户未登录");
             Assert.notNull(sign, "用户未登录");
 
-            //token判断
-            if (!TokenUtil.checkToken(uri, Integer.valueOf(userId), ts, sign)) {
+            //token判断，不加uri加签
+            if (!TokenUtil.checkToken("", Integer.valueOf(userId), ts, sign)) {
                 //未登录
                 print(response, "-1", "登录已过期，请重新登录");
                 return;
