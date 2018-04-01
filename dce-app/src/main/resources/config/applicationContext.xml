@@ -5,6 +5,7 @@
 	xmlns:tx="http://www.springframework.org/schema/tx" 
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
@@ -15,13 +16,17 @@
 		http://www.springframework.org/schema/context 
 		http://www.springframework.org/schema/context/spring-context-4.0.xsd
 		http://www.springframework.org/schema/util 
-		http://www.springframework.org/schema/util/spring-util-4.0.xsd"
+		http://www.springframework.org/schema/util/spring-util-4.0.xsd
+		http://www.springframework.org/schema/task 
+        http://www.springframework.org/schema/task/spring-task-3.0.xsd"
 	default-lazy-init="false">
 	<description>Spring scan</description>
 	
 	<!-- IOC注解 -->
 	<context:component-scan base-package="com.dce">
 	</context:component-scan>
+	
+	<task:annotation-driven />
 
     <bean id="sysconfig"
         class="org.springframework.beans.factory.config.PropertiesFactoryBean">

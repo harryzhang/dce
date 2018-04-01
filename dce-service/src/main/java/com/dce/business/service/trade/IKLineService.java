@@ -7,7 +7,9 @@ import com.dce.business.entity.trade.KLineDo;
 
 public interface IKLineService {
     
-    String getKLine(String type);
+    List<KLineDo> getKLine(String type);
     
     List<KLineDo> calKLine(KLineTypeEnum kLineType);
+    
+    void updateKLine();
 }

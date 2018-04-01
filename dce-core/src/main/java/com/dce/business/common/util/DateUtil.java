@@ -25,8 +25,10 @@ public final class DateUtil {
         }
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MINUTE, minute);
-        if (hour != null) {
+        if (hour != null && hour == 0) {
             calendar.set(Calendar.HOUR_OF_DAY, hour);
+        } else if (hour != null && hour != 0) {
+            calendar.add(Calendar.HOUR_OF_DAY, hour);
         }
         if (day != null) {
             calendar.add(Calendar.DATE, day);
@@ -53,8 +55,8 @@ public final class DateUtil {
         Date resultDate = ca.getTime(); // 结果  
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         System.out.println(resultDate);
-        
-        ca =Calendar.getInstance();
+
+        ca = Calendar.getInstance();
         ca.setTime(resultDate);
         ca.add(Calendar.DATE, -1);// 日期减1  
         ca.set(Calendar.SECOND, 0);

@@ -1,6 +1,7 @@
 package com.dce.business.service.impl.trade;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +9,13 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.dce.business.common.enums.KLineTypeEnum;
 import com.dce.business.common.redis.JedisClient;
 import com.dce.business.common.util.DateUtil;
@@ -22,6 +28,7 @@ import com.dce.business.service.trade.IKLineService;
 
 @Service("kLineService")
 public class KLineServiceImpl implements IKLineService {
+    private final static Logger logger = Logger.getLogger(KLineServiceImpl.class);
     private final static String KLINE_PREFIX = "kline_";
     private final static int count = 180; //只计算180个周期
 
@@ -29,13 +36,46 @@ public class KLineServiceImpl implements IKLineService {
     private IKLineDao kLineDao;
 
     @Override
-    public String getKLine(String type) {
+    public List<KLineDo> getKLine(String type) {
         JedisClient jedisClient = SpringBeanUtil.getBean("jedisClient");
-        return jedisClient.getString(KLINE_PREFIX + type);
+        String json = jedisClient.getString(KLINE_PREFIX + type);
+        List<KLineDo> klineList = null;
+        //还没有K线图，需要计算
+        if (StringUtils.isEmpty(json)) {
+            klineList = calKLine(KLineTypeEnum.getKLineType(type));
+            jedisClient.setString(KLINE_PREFIX + type, JSON.toJSONString(klineList), -1);
+        } else {
+            klineList = JSON.parseObject(json, new TypeReference<List<KLineDo>>() {
+            });
+        }
+
+        return klineList;
+    }
+
+    @Override
+    public void updateKLine() {
+        JedisClient jedisClient = SpringBeanUtil.getBean("jedisClient");
+
+        //小时
+        List<KLineDo> klineList = calKLine(KLineTypeEnum.KLINE_TYPE_HOUR);
+        jedisClient.setString(KLINE_PREFIX + KLineTypeEnum.KLINE_TYPE_HOUR.getType(), JSON.toJSONString(klineList), -1);
+
+        Calendar calendar = Calendar.getInstance();
+        if (calendar.get(Calendar.HOUR_OF_DAY) == 0) {
+            //天
+            klineList = calKLine(KLineTypeEnum.KLINE_TYPE_DAY);
+            jedisClient.setString(KLINE_PREFIX + KLineTypeEnum.KLINE_TYPE_DAY.getType(), JSON.toJSONString(klineList), -1);
+            //周
+            klineList = calKLine(KLineTypeEnum.KLINE_TYPE_WEEK);
+            jedisClient.setString(KLINE_PREFIX + KLineTypeEnum.KLINE_TYPE_WEEK.getType(), JSON.toJSONString(klineList), -1);
+        }
     }
 
     @Override
     public List<KLineDo> calKLine(KLineTypeEnum kLineType) {
+        logger.info("开始计算K线图：" + kLineType);
+        Assert.notNull(kLineType, "类型错误");
+        Long time = System.currentTimeMillis();
         List<KLineDo> list = new ArrayList<>();
 
         Date terminationDate = DateUtil.getDate(new Date(), 0, 0, -1000); //最长只计算1000天之前的
@@ -73,10 +113,11 @@ public class KLineServiceImpl implements IKLineService {
             kLineDo.setMa10(getMA(kLineType, endDate, 10));
             kLineDo.setMa20(getMA(kLineType, endDate, 20));
             list.add(kLineDo);
-            
-            endDate = startDate; 
+
+            endDate = startDate;
         }
 
+        logger.info("计算K线图结束：" + kLineType + "; 总耗时ms：" + (System.currentTimeMillis() - time));
         return list;
     }
 

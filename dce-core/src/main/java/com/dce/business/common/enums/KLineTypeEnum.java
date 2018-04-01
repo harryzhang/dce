@@ -19,4 +19,13 @@ public enum KLineTypeEnum {
         this.type = type;
     }
 
+    public static KLineTypeEnum getKLineType(String type) {
+        for (KLineTypeEnum item : KLineTypeEnum.values()) {
+            if (item.getType().equals(type)) {
+                return item;
+            }
+        }
+
+        return null;
+    }
 }
