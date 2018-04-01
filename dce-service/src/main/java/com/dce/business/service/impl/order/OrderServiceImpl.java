@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.dce.business.common.enums.AccountMsg;
 import com.dce.business.common.enums.AccountType;
 import com.dce.business.dao.order.IOrderDao;
+import com.dce.business.dao.trade.IKLineDao;
 import com.dce.business.entity.order.OrderDo;
+import com.dce.business.entity.trade.KLineDo;
 import com.dce.business.service.account.IAccountService;
 import com.dce.business.service.order.IOrderService;
 
@@ -24,6 +26,8 @@ public class OrderServiceImpl implements IOrderService {
     private IOrderDao orderDao;
     @Resource
     private IAccountService accountService;
+    @Resource
+    private IKLineDao kLineDao;
 
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
@@ -59,7 +63,6 @@ public class OrderServiceImpl implements IOrderService {
         paraMap.put("oldStatus", 1);
         paraMap.put("matchOrderId", newOrder.getOrderId());
         paraMap.put("orderId", newOrder.getMatchOrderId());
-        //更改匹配的订单状态为交易中
         orderDao.updateOrderStatusByOldStatus(paraMap);
 
         //更新账户金额
@@ -75,6 +78,14 @@ public class OrderServiceImpl implements IOrderService {
             accountService.convertBetweenAccount(newOrder.getUserId(), matchOrder.getUserId(), newOrder.getQty(),
                     AccountType.current.getAccountType(), AccountType.current.getAccountType(), AccountMsg.type_1, AccountMsg.type_1);
         }
+
+        //记录K线数据
+        KLineDo kLineDo = new KLineDo();
+        kLineDo.setPrice(matchOrder.getPrice());
+        kLineDo.setQty(matchOrder.getQty());
+        kLineDo.setTotalAmount(matchOrder.getTotalPrice());
+        kLineDo.setCtime(new Date());
+        kLineDao.insertSelective(kLineDo);
     }
 
     @Override

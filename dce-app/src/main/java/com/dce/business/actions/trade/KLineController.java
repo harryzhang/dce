@@ -2,14 +2,18 @@ package com.dce.business.actions.trade;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dce.business.actions.common.BaseController;
+import com.dce.business.common.enums.KLineTypeEnum;
 import com.dce.business.common.result.Result;
-import com.dce.business.entity.trade.TradeDo;
+import com.dce.business.entity.trade.KLineDo;
+import com.dce.business.service.trade.IKLineService;
 
 /** 
  * k线图 MA线 
@@ -22,17 +26,14 @@ import com.dce.business.entity.trade.TradeDo;
 public class KLineController extends BaseController {
     private final static Logger logger = Logger.getLogger(KLineController.class);
 
-    /** 
-     * 
-     * @return  
-     */
-//    @RequestMapping(value = "/records", method = RequestMethod.GET)
-//    public Result<?> getTradeRecords() {
-//        Integer userId = getUserId();
-//        logger.info("查询交易明细, userId:" + userId);
-//
-//        List<TradeDo> list = tradeService.getTradeRecords(userId);
-//
-//        return Result.successResult("查询成功", convertTradeInfo(list));
-//    }
+    @Resource
+    private IKLineService kLineService;
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public Result<?> getTradeRecords() {
+
+        List<KLineDo> a = kLineService.calKLine(KLineTypeEnum.KLINE_TYPE_DAY);
+
+        return Result.successResult("查询成功", a);
+    }
 }
