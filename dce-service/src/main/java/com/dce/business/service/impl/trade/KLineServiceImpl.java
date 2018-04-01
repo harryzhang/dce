@@ -81,9 +81,6 @@ public class KLineServiceImpl implements IKLineService {
         Date terminationDate = DateUtil.getDate(new Date(), 0, 0, -1000); //最长只计算1000天之前的
         Date endDate = KLineUtil.getStartDate(kLineType);
         while (terminationDate.before(endDate) && (list.size() < count)) {
-            KLineDo kLineDo = new KLineDo();
-            kLineDo.setDate(DateUtil.dateToString(endDate));
-
             Date startDate = KLineUtil.getNextDate(kLineType, endDate); //往前推时间
 
             //查询开始日期到结束日期以内最高价，最低价
@@ -104,6 +101,8 @@ public class KLineServiceImpl implements IKLineService {
             KLineDo close = kLineDao.selectPrice(params); //查询收盘价
             params.remove("close");
 
+            KLineDo kLineDo = new KLineDo();
+            kLineDo.setDate(DateUtil.dateToString(startDate));
             kLineDo.setHigh(volume.getHigh());
             kLineDo.setLow(volume.getLow());
             kLineDo.setVolume(volume.getVolume());

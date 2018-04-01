@@ -13,11 +13,11 @@ import com.dce.business.common.enums.KLineTypeEnum;
 public final class KLineUtil {
     public static Date getStartDate(KLineTypeEnum kLineType) {
         if (KLineTypeEnum.KLINE_TYPE_HOUR.equals(kLineType)) {
-            return DateUtil.getDate(new Date(), 0, -1, null);
+            return DateUtil.getDate(new Date(), 0, null, null);
         } else if (KLineTypeEnum.KLINE_TYPE_DAY.equals(kLineType)) {
-            return DateUtil.getDate(new Date(), 0, 0, -1);
+            return DateUtil.getDate(new Date(), 0, 0, null);
         } else if (KLineTypeEnum.KLINE_TYPE_WEEK.equals(kLineType)) {
-            return DateUtil.getDate(new Date(), 0, 0, -1);
+            return DateUtil.getDate(new Date(), 0, 0, null);
         }
 
         return null;
