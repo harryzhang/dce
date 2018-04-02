@@ -58,7 +58,7 @@ public class AccountController extends BaseController {
         for (UserAccountDetailDo detail : list) {
             Map<String, Object> map = new HashMap<>();
             map.put("userId", detail.getUserId()); //用户名
-            map.put("userName", ""); //用户名
+            map.put("userName", detail.getUserName()); //用户名
             map.put("flowType", "静态释放"); //流水类型 TODO
             map.put("amount", detail.getAmount().abs()); //变更数量
             map.put("blanceAmount", ""); //余额

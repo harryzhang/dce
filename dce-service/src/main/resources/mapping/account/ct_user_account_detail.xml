@@ -11,6 +11,7 @@
 		<result property="createTime" column="createTime" />
 		<result property="accountType" column="accountType" />
 		<result property="remark" column="remark" />
+		<result property="userName" column="userName" />
 	</resultMap>
 
 	<select id="getById" parameterType="Long" resultMap="userAccountDetailResultMap">
@@ -19,41 +20,42 @@
 	</select>
 
 	<select id="selectUserAccountDetail" parameterType="Map" resultMap="userAccountDetailResultMap">
-		SELECT * 
-		  FROM ct_user_account_detail
+		SELECT d.*,  u.user_name as userName
+		  FROM ct_user_account_detail d
+		  left join ct_user u on d.userId = u.id
 		  <trim prefix="WHERE" prefixOverrides="AND |OR "> 
 			<if test="id != null">  
-				AND id = #{id}
+				AND d.id = #{id}
 			</if>
 			<if test="userId != null">  
-				AND userId = #{userId}
+				AND d.userId = #{userId}
 			</if>
 			<if test="amount != null">  
-				AND amount = #{amount}
+				AND d.amount = #{amount}
 			</if>
 			<if test="moreOrLess != null">  
-				AND moreOrLess = #{moreOrLess}
+				AND d.moreOrLess = #{moreOrLess}
 			</if>
 			<if test="incomeType != null">  
-				AND incomeType = #{incomeType}
+				AND d.incomeType = #{incomeType}
 			</if>
 			<if test="accountType != null">  
-				AND accountType = #{accountType}
+				AND d.accountType = #{accountType}
 			</if>
 			<if test="remark != null">  
-				AND remark = #{remark}
+				AND d.remark = #{remark}
 			</if>
 			<if test="createTime != null">  
-				AND date_format(createTime,'%Y-%m-%d') = #{createTime}
+				AND date_format(d.createTime,'%Y-%m-%d') = #{createTime}
 			</if>
 			<if test="startTime != null">  
-			    <![CDATA[AND createTime >= str_to_date(#{startTime},'%Y-%m-%d %H') ]]>
+			    <![CDATA[AND d.createTime >= str_to_date(#{startTime},'%Y-%m-%d %H') ]]>
             </if>
             <if test="endTime != null">  
-                <![CDATA[AND createTime <= str_to_date(#{endTime},'%Y-%m-%d %H') ]]>
+                <![CDATA[AND d.createTime <= str_to_date(#{endTime},'%Y-%m-%d %H') ]]>
             </if>
          </trim> 
-			order by createTime desc
+			order by d.createTime desc
 	</select>
 	
 	<select id="selectUserTransPoint" parameterType="Map" resultType="BigDecimal">
