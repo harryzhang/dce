@@ -21,7 +21,11 @@ public enum AccountType {
      * @return  
      */
     point("point", "美元点账户"),
-
+    /** 
+     * 锁仓账户
+     * @return  
+     */
+    locked("locked", "锁仓"),
     /**
      * 积分账户
      */
