@@ -69,4 +69,20 @@ public class AccountController extends BaseController {
         return Result.successResult("查询成功", result);
     }
 
+    /** 
+     * 账户基本信息
+     * @return  
+     */
+    @RequestMapping(value = "/baseInfo", method = RequestMethod.GET)
+    public Result<?> getTradeBaseInfo() {
+        Integer userId = getUserId();
+        logger.info("账户基本信息, userId:" + userId);
+
+        //TODO 此接口需要完善
+        Map<String, Object> map = new HashMap<>();
+        map.put("pointAmount", 2011.06); //美元点余额
+        map.put("coinAmount", 121.09); //奖金币余额
+         
+        return Result.successResult("查询成功", map);
+    }
 }

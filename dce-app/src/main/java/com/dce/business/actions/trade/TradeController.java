@@ -82,6 +82,26 @@ public class TradeController extends BaseController {
     }
 
     /** 
+     * 交易页面基本信息
+     * @return  
+     */
+    @RequestMapping(value = "/baseInfo", method = RequestMethod.GET)
+    public Result<?> getTradeBaseInfo() {
+        Integer userId = getUserId();
+        logger.info("进入交易页面, userId:" + userId);
+
+        //TODO 此接口需要完善
+        Map<String, Object> map = new HashMap<>();
+        map.put("latestPrice", 4.3606); //当前价格
+        map.put("24hourHighestPrice", 4.3693); //24小时最高价
+        map.put("24hourLowestPrice", 4.3693);//24小时最低价
+        map.put("24hourVolume", 2088888);//24小时成交量
+        map.put("rose", -0.18);//涨幅 
+        map.put("roseRate", -5.29);//涨幅比例
+        return Result.successResult("查询成功", map);
+    }
+
+    /** 
      * 以美元点购买DCE币
      * @return  
      */
@@ -96,7 +116,6 @@ public class TradeController extends BaseController {
             return Result.failureResult(errors.get(0).getDefaultMessage());
         }
 
-        
         return Result.successResult("购买成功");
     }
 

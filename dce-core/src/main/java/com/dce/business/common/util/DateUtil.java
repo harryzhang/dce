@@ -1,12 +1,14 @@
 package com.dce.business.common.util;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public final class DateUtil {
     public final static DateFormat YYYY_MM_DD_MM_HH_SS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public final static DateFormat YYYY_MM_DD = new SimpleDateFormat("yyyy-MM-dd");
     public final static DateFormat YYYYMMDDHHMMSS = new SimpleDateFormat("yyyyMMddHHmmss");
 
     /**
@@ -17,7 +19,7 @@ public final class DateUtil {
     public static String dateToString(Date date) {
         return YYYY_MM_DD_MM_HH_SS.format(date);
     }
-
+    
     public static Date getDate(Date date, int minute, Integer hour, Integer day) {
         Calendar calendar = Calendar.getInstance();
         if (date != null) {

@@ -130,6 +130,7 @@ public class UserController extends BaseController {
         newUserDo.setTrueName(userDo.getTrueName());
         newUserDo.setUserLevel(userDo.getUserLevel());
         newUserDo.setReleaseTime(userDo.getReleaseTime()); //释放时间
+        newUserDo.setUserFace(userDo.getUserFace());
 
         //推荐人
         if (userDo.getRefereeid() != null) {

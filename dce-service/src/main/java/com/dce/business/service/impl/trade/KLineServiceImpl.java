@@ -1,7 +1,10 @@
 package com.dce.business.service.impl.trade;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -115,6 +118,20 @@ public class KLineServiceImpl implements IKLineService {
 
             endDate = startDate;
         }
+
+        Collections.sort(list, new Comparator<KLineDo>() {
+            @Override
+            public int compare(KLineDo o1, KLineDo o2) {
+                try {
+                    Date a = DateUtil.YYYY_MM_DD_MM_HH_SS.parse(o1.getDate());
+                    Date b = DateUtil.YYYY_MM_DD_MM_HH_SS.parse(o2.getDate());
+                    return a.compareTo(b);
+                } catch (ParseException e) {
+                    logger.error("排序错误：", e);
+                }
+                return 0;
+            }
+        });
 
         logger.info("计算K线图结束：" + kLineType + "; 总耗时ms：" + (System.currentTimeMillis() - time));
         return list;

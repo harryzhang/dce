@@ -2,6 +2,7 @@ package com.dce.business.actions.order;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dce.business.actions.common.BaseController;
 import com.dce.business.common.enums.AccountType;
 import com.dce.business.common.result.Result;
+import com.dce.business.common.util.DateUtil;
 import com.dce.business.common.util.OrderCodeUtil;
 import com.dce.business.entity.account.UserAccountDo;
 import com.dce.business.entity.order.OrderDo;
@@ -116,7 +118,59 @@ public class OrderController extends BaseController {
             params.put("orderStatus", "2");
         }
 
-        List<OrderDo> list = orderService.selectOrder(params);
+        List<OrderDo> orderList = orderService.selectOrder(params);
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (OrderDo order : orderList) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("orderId", order.getOrderId()); //订单id
+            map.put("qty", order.getQty()); //数量
+            map.put("price", order.getPrice()); //单价
+            map.put("totalPrice", order.getTotalPrice()); //总额
+            map.put("orderStatus", order.getOrderStatus()); //0-无效；1-交易中；2--交易完成
+            map.put("date", DateUtil.dateToString(order.getCreateTime())); //挂单时间
+            map.put("orderType", order.getOrderType()); //订单类型
+            list.add(map);
+        }
+        return Result.successResult("成功", list);
+    }
+
+    /** 
+     * 撤销订单
+     * @return  
+     */
+    @RequestMapping(value = "/cancel", method = RequestMethod.POST)
+    public Result<?> cancel() {
+        String orderId = getString("orderId");  
+
+        Assert.hasText(orderId, "订单id不能为空");
+
+        //TODO 此接口需要完善
+        //1、订单状态校验，只有待交易的订单才允许撤销
+        //2、只能撤销自己的订单
+        return Result.successResult("撤销成功");
+    }
+    
+    /** 
+     * 挂单列表
+     * @return  
+     */
+    @RequestMapping(value = "/guadanList", method = RequestMethod.GET)
+    public Result<?> guadanList() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("orderStatus", "1"); //查询待交易的订单
+
+        List<OrderDo> orderList = orderService.selectOrder(params);
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (OrderDo order : orderList) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("orderId", order.getOrderId()); //订单id
+            map.put("qty", order.getQty()); //数量
+            map.put("price", order.getPrice()); //单价
+            map.put("amount", order.getTotalPrice()); //总额
+            map.put("date", DateUtil.dateToString(order.getCreateTime())); //挂单时间
+            map.put("orderType", order.getOrderType()); //订单类型
+            list.add(map);
+        }
         return Result.successResult("成功", list);
     }
 }
