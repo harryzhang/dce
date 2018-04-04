@@ -48,6 +48,7 @@ public class MallController extends BaseController {
         for (int i = 0; i < 10; i++) {
             Map<String, Object> map = new HashMap<>();
             map.put("imgUrl", "https://images.qianshenghua.com/s_1/static/article/images/201804/article_1522824240130528.png"); //用户名
+            map.put("productId", i);
             map.put("productName", "加斯链" + i);
             map.put("soldQty", random.nextInt(10000));
             map.put("price", 998.6685);
