@@ -52,6 +52,7 @@ public class TradeController extends BaseController {
     @RequestMapping(value = "/records", method = RequestMethod.POST)
     public Result<?> getTradeRecords() {
         Integer userId = getUserId();
+        
         logger.info("查询交易明细, userId:" + userId);
 
         List<TradeDo> list = tradeService.getTradeRecords(userId);
