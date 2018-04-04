@@ -164,4 +164,60 @@ public class UserController extends BaseController {
         map.put("userAccountDo", newUserAccountDo);
         return Result.successResult("查询成功", map);
     }
+
+    /** 
+     * 个人中心查询个人信息
+     * @return  
+     */
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    public Result<?> getUser() {
+        Integer userId = getUserId();
+
+        logger.info("查询用户基本信息，userId:" + userId);
+
+        //用户信息
+        UserDo userDo = userService.getUser(userId);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("trueName", userDo.getTrueName()); //姓名
+        map.put("mobile", userDo.getMobile()); //手机号码
+        map.put("email", userDo.getEmail());
+        map.put("idnumber", userDo.getIdnumber());
+        map.put("banktype", userDo.getBanktype());
+        map.put("bankUserName", userDo.getBankUserName());
+        map.put("banknumber", userDo.getBanknumber());
+        map.put("bankContent", userDo.getBankContent());
+        return Result.successResult("查询成功", map);
+    }
+
+    /** 
+     * 修改用户信息
+     * @return  
+     */
+    @RequestMapping(value = "/info", method = RequestMethod.POST)
+    public Result<?> updateUser() {
+        Integer userId = getUserId();
+        String trueName = getString("trueName");
+        String mobile = getString("mobile");
+        String email = getString("email");
+        String idnumber = getString("idnumber");
+        String banktype = getString("banktype");
+        String bankUserName = getString("bankUserName");
+        String banknumber = getString("banknumber");
+        String bankContent = getString("bankContent");
+        logger.info("修改用户信息，userId:" + userId);
+
+        Assert.hasText(trueName, "姓名不能为空");
+        Assert.hasText(mobile, "手机号码不能为空");
+        Assert.hasText(email, "邮箱不能为空");
+        Assert.hasText(idnumber, "身份证不能为空");
+        Assert.hasText(banktype, "银行不能为空");
+        Assert.hasText(bankUserName, "开户名不能为空");
+        Assert.hasText(banknumber, "银行卡号不能为空");
+        Assert.hasText(bankContent, "支行不能为空");
+        //用户信息
+        UserDo userDo = userService.getUser(userId);
+
+        return Result.successResult("成功");
+    }
 }
