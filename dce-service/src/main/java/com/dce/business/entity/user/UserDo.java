@@ -63,8 +63,10 @@ public class UserDo {
 
     private BigDecimal totalShopping;
 
+    @NotBlank(message = "推荐人不能为空")
     private Integer refereeid;
 
+    @NotBlank(message = "接点人不能为空")
     private Integer parentid;
 
     private String refereeUserName; //推荐人用户名

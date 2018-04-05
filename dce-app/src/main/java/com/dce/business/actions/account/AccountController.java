@@ -72,23 +72,6 @@ public class AccountController extends BaseController {
         return Result.successResult("查询成功", result);
     }
 
-    /**
-     * 财务管理首页  查询美元点余额、奖金比可用余额
-     * @return
-     */
-    @RequestMapping(value = "/baseInfo", method = {RequestMethod.POST,RequestMethod.GET})
-    public Result<?> baseInfo(){
-    	 Integer userId = getUserId();
-    	 logger.info("查询用户" + userId + ",财务首页");
-    	 UserAccountDo userAccountDo = accountService.selectUserAccount(userId,AccountType.point.name());
-    	 Map<String,Object> result = new HashMap<String,Object>();
-    	 result.put("pointAmount", userAccountDo.getPointAmount());
-    	 
-    	 //TODO
-    	 result.put("coinAmount", "121.09");
-    	 
-    	 return Result.successResult("查询成功",result);
-    }
     
     @RequestMapping(value = "/ethereum", method = {RequestMethod.POST,RequestMethod.GET})
     public Result<?> ethereum(){
@@ -116,4 +99,20 @@ public class AccountController extends BaseController {
     	return Result.successResult("提现成功");
     }
     
+    /** 
+     * 账户基本信息
+     * @return  
+     */
+    @RequestMapping(value = "/baseInfo", method = RequestMethod.GET)
+    public Result<?> getTradeBaseInfo() {
+        Integer userId = getUserId();
+        logger.info("账户基本信息, userId:" + userId);
+
+        //TODO 此接口需要完善
+        Map<String, Object> map = new HashMap<>();
+        map.put("pointAmount", 2011.06); //美元点余额
+        map.put("coinAmount", 121.09); //奖金币余额
+         
+        return Result.successResult("查询成功", map);
+    }
 }

@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import com.dce.business.common.enums.AccountMsg;
+import com.dce.business.common.enums.IncomeType;
 import com.dce.business.common.exception.BusinessException;
 import com.dce.business.dao.account.IUserAccountDao;
 import com.dce.business.dao.account.IUserAccountDetailDao;
@@ -74,7 +74,7 @@ public class AccountServiceImpl implements IAccountService {
 
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public int updateUserAmountById(UserAccountDo bizUserAccountDo, AccountMsg type) {
+    public int updateUserAmountById(UserAccountDo bizUserAccountDo, IncomeType type) {
         //增加用户收益、消费金额
         BigDecimal amount = bizUserAccountDo.getAmount();
         if (amount.compareTo(BigDecimal.ZERO) >= 0) {
@@ -115,16 +115,16 @@ public class AccountServiceImpl implements IAccountService {
      * @return
      */
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public boolean updateUserAmountDetail(BigDecimal amount, AccountMsg type, Integer userId, String accountType, String remark) {
+    public boolean updateUserAmountDetail(BigDecimal amount, IncomeType type, Integer userId, String accountType, String remark) {
         // 增加用户消费列表
         UserAccountDetailDo uaDetail = new UserAccountDetailDo();
         uaDetail.setAmount(amount);
         uaDetail.setCreateTime(new Date());
-        uaDetail.setIncomeType(type.accountType);
+        uaDetail.setIncomeType(type.getIncomeType());
         uaDetail.setMoreOrLess(moreOrLessStr(amount));
         uaDetail.setAccountType(accountType);
         if (StringUtils.isBlank(remark)) {
-            uaDetail.setRemark(type.message + amount.toString());
+            uaDetail.setRemark(type.getRemark());
         } else {
             uaDetail.setRemark(remark);
         }
@@ -136,7 +136,7 @@ public class AccountServiceImpl implements IAccountService {
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void convertBetweenAccount(Integer sourceUserId, Integer targetUserId, BigDecimal amount, String fromAccount, String toAccount,
-            AccountMsg sourceMsg, AccountMsg targetMsg) {
+            IncomeType sourceMsg, IncomeType targetMsg) {
 
         UserAccountDo source = new UserAccountDo();
         source.setUserId(sourceUserId);

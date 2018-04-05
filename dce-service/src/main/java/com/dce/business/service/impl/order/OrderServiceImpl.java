@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.dce.business.common.enums.AccountMsg;
 import com.dce.business.common.enums.AccountType;
+import com.dce.business.common.enums.IncomeType;
 import com.dce.business.dao.order.IOrderDao;
 import com.dce.business.dao.trade.IKLineDao;
 import com.dce.business.entity.order.OrderDo;
@@ -69,14 +69,14 @@ public class OrderServiceImpl implements IOrderService {
         Integer orderType = newOrder.getOrderType(); //如果是买，则购买者减少美元点账户，添加币账户
         if (orderType == 1) {
             accountService.convertBetweenAccount(newOrder.getUserId(), matchOrder.getUserId(), newOrder.getTotalPrice(),
-                    AccountType.point.getAccountType(), AccountType.point.getAccountType(), AccountMsg.type_1, AccountMsg.type_1);
+                    AccountType.point.getAccountType(), AccountType.point.getAccountType(), IncomeType.TYPE_PURCHASE, IncomeType.TYPE_SELL);
             accountService.convertBetweenAccount(matchOrder.getUserId(), newOrder.getUserId(), newOrder.getQty(),
-                    AccountType.current.getAccountType(), AccountType.current.getAccountType(), AccountMsg.type_1, AccountMsg.type_1);
+                    AccountType.current.getAccountType(), AccountType.current.getAccountType(), IncomeType.TYPE_SELL, IncomeType.TYPE_PURCHASE);
         } else {
             accountService.convertBetweenAccount(matchOrder.getUserId(), newOrder.getUserId(), newOrder.getTotalPrice(),
-                    AccountType.point.getAccountType(), AccountType.point.getAccountType(), AccountMsg.type_1, AccountMsg.type_1);
+                    AccountType.point.getAccountType(), AccountType.point.getAccountType(), IncomeType.TYPE_SELL, IncomeType.TYPE_PURCHASE);
             accountService.convertBetweenAccount(newOrder.getUserId(), matchOrder.getUserId(), newOrder.getQty(),
-                    AccountType.current.getAccountType(), AccountType.current.getAccountType(), AccountMsg.type_1, AccountMsg.type_1);
+                    AccountType.current.getAccountType(), AccountType.current.getAccountType(), IncomeType.TYPE_PURCHASE, IncomeType.TYPE_SELL);
         }
 
         //记录K线数据
