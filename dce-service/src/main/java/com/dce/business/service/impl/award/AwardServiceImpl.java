@@ -160,4 +160,8 @@ public class AwardServiceImpl implements IAwardService {
 
         return award;
     }
+    
+    @Override
+    public void calTouchAward() {
+    }
 }
