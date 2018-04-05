@@ -1198,7 +1198,7 @@
     </select>
     
     <update id="updateStatic" parameterType="java.util.Map">
-        update ct_user set allStatic = allStatic+#{staticAmount} where id=#{userId}
+        update ct_user set allStatic = allStatic+#{staticAmount},release_time=unix_timestamp(now()) where id=#{userId}
     </update>
     
     <update id="updateTouched" parameterType="java.util.Map">
