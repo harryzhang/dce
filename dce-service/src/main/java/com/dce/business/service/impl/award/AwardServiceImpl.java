@@ -22,6 +22,7 @@ import com.dce.business.common.util.DateUtil;
 import com.dce.business.dao.account.IUserAccountOrderDao;
 import com.dce.business.entity.account.UserAccountDo;
 import com.dce.business.entity.account.UserAccountOrderDo;
+import com.dce.business.entity.user.UserDo;
 import com.dce.business.service.account.IAccountService;
 import com.dce.business.service.award.IAwardService;
 import com.dce.business.service.user.IUserService;
@@ -94,6 +95,34 @@ public class AwardServiceImpl implements IAwardService {
 
         BigDecimal result = amount.divide(new BigDecimal("365"), 6, RoundingMode.HALF_UP).multiply(rate).setScale(4, RoundingMode.HALF_UP);
         return result;
+    }
+
+    @Override
+    public void calRecommendAward(Integer userId, BigDecimal amount) {
+        UserDo userDo = userService.getUser(userId);
+
+        Integer refereeId = userDo.getRefereeid(); //推荐人
+        UserDo refereeDo = userService.getUser(refereeId);
+
+        Integer count = refereeDo.getRefereeNumber();//推荐人数
+        BigDecimal award = BigDecimal.ZERO;
+        if (count == 1) { //第1个5%
+            award = amount.multiply(new BigDecimal("0.05")).setScale(4, RoundingMode.HALF_UP);
+        } else if (count == 2) { //第2个6%
+            award = amount.multiply(new BigDecimal("0.06")).setScale(4, RoundingMode.HALF_UP);
+        } else if (count == 3) { //第3个7%
+            award = amount.multiply(new BigDecimal("0.07")).setScale(4, RoundingMode.HALF_UP);
+        } else if (count == 4) { //第4个8%
+            award = amount.multiply(new BigDecimal("0.08")).setScale(4, RoundingMode.HALF_UP);
+        } else if (count >= 5) { //第5个或以上10%
+            award = amount.multiply(new BigDecimal("0.1")).setScale(4, RoundingMode.HALF_UP);
+        }
+
+        UserAccountDo accountDo = new UserAccountDo();
+        accountDo.setUserId(refereeId);
+        accountDo.setAmount(award);
+        accountDo.setAccountType(AccountType.current.getAccountType());
+        accountService.updateUserAmountById(accountDo, IncomeType.TYPE_AWARD_REFEREE);
     }
 
 }

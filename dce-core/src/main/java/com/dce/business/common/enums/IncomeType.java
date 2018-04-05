@@ -29,7 +29,19 @@ public enum IncomeType {
     /**
      * 提现
      */
-    TYPE_WITHDRAW(22, "提现");
+    TYPE_WITHDRAW(22, "提现"),
+    /**
+     * 推荐奖励
+     */
+    TYPE_AWARD_REFEREE(311, "推荐奖励"),
+    /**
+     * 领导奖励
+     */
+    TYPE_AWARD_LEADER(321, "领导奖励"),
+    /**
+     * 量碰奖励
+     */
+    TYPE_AWARD_LIANGPENG(321, "量碰奖励");
 
     private int incomeType;
     private String remark;

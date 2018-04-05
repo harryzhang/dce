@@ -14,13 +14,17 @@ import org.springframework.util.CollectionUtils;
 
 import com.dce.business.common.exception.BusinessException;
 import com.dce.business.dao.user.IUserDao;
+import com.dce.business.dao.user.IUserParentDao;
 import com.dce.business.entity.user.UserDo;
+import com.dce.business.entity.user.UserParentDo;
 import com.dce.business.service.user.IUserService;
 
 @Service("userService")
 public class UserServiceImpl implements IUserService {
     @Resource
     private IUserDao userDao;
+    @Resource
+    private IUserParentDao userParentDao;
 
     @Override
     public UserDo getUser(String userName) {
@@ -50,7 +54,41 @@ public class UserServiceImpl implements IUserService {
 
         //用户注册
         int result = userDao.insertSelective(userDo);
+
+        //TODO
+        //更新推荐人
+        UserDo referee = getUser(userDo.getRefereeid());
+        Integer refereeNumber = referee.getRefereeNumber() == null ? 0 : referee.getRefereeNumber();
+        referee.setRefereeNumber(refereeNumber + 1);
+        userDao.updateByPrimaryKeySelective(referee);
+        //更新父节点表
+        saveUserParent(userDo.getId());
         return result > 0;
+    }
+
+    private void saveUserParent(Integer userId) {
+        Integer currentUserId = userId;
+        Integer distance = 0;
+        while (true) {
+            UserDo userDo = userDao.selectByPrimaryKey(currentUserId);
+            
+            if (userDo == null || userDo.getParentid() <= 0) {
+                break;
+            }
+            Integer parentId = userDo.getParentid();
+            distance++;
+
+            UserParentDo userParentDo = new UserParentDo();
+            userParentDo.setParentid(userDo.getParentid());
+            userParentDo.setUserid(userDo.getId());
+            userParentDo.setDistance(distance);
+            userParentDo.setPosition(null); //TODO 这个字段不知道是什么，待确认
+            userParentDo.setNetwork(null);//TODO 这个字段不知道是什么，待确认
+            userParentDo.setLrDistrict(userDo.getPos());
+            userParentDao.insertSelective(userParentDo);
+            
+            currentUserId = parentId; //一直往上找
+        }
     }
 
     @Override

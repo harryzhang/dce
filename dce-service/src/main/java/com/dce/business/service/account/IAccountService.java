@@ -21,7 +21,7 @@ public interface IAccountService {
 
     UserAccountDo selectUserAccount(Integer userId, String accountType);
 
-    int updateUserAmountById(UserAccountDo bizUserAccountDo, IncomeType type);
+    int updateUserAmountById(UserAccountDo userAccountDo, IncomeType type);
 
     void convertBetweenAccount(Integer sourceUserId, Integer targetUserId, BigDecimal amount, String fromAccount, String toAccount, IncomeType sourceMsg,
             IncomeType targetMsg);
