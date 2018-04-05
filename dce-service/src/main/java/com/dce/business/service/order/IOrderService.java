@@ -18,4 +18,6 @@ public interface IOrderService {
     void matchOrder(Integer userId, OrderDo matchOrderDo);
 
     List<OrderDo> selectOrder(Map<String, Object> params);
+    
+    int updateOrder(OrderDo orderDo);
 }

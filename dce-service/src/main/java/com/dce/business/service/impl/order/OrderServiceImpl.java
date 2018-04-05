@@ -92,4 +92,12 @@ public class OrderServiceImpl implements IOrderService {
     public List<OrderDo> selectOrder(Map<String, Object> params) {
         return orderDao.selectOrder(params);
     }
+
+	@Override
+	public int updateOrder(OrderDo orderDo) {
+		if(orderDo == null){
+			return 0;
+		}
+		return orderDao.updateByPrimaryKeySelective(orderDo);
+	}
 }

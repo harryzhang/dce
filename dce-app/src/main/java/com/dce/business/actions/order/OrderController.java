@@ -119,4 +119,24 @@ public class OrderController extends BaseController {
         List<OrderDo> list = orderService.selectOrder(params);
         return Result.successResult("成功", list);
     }
+    
+    /**
+     * cancel撤销订单
+     * @return
+     */
+    @RequestMapping(value = "/cancel", method = RequestMethod.POST)
+    public Result<?> cancel(){
+    	
+    	String orderId = getString("orderId");
+    	OrderDo orderDo = new OrderDo();
+    	orderDo.setOrderId(Long.parseLong(orderId));
+    	orderDo.setOrderStatus(0);
+    	int result = orderService.updateOrder(orderDo);
+    	if(result > 0){
+    		
+    		return Result.successResult("撤销成功");
+    	}else{
+    		return Result.failureResult("撤销订单失败!");
+    	}
+    }
 }

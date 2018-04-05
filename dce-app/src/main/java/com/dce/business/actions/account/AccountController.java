@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dce.business.actions.common.BaseController;
+import com.dce.business.common.enums.AccountType;
 import com.dce.business.common.result.Result;
 import com.dce.business.common.util.DateUtil;
 import com.dce.business.entity.account.UserAccountDetailDo;
+import com.dce.business.entity.account.UserAccountDo;
 import com.dce.business.service.account.IAccountService;
 
 @RestController
@@ -63,10 +65,55 @@ public class AccountController extends BaseController {
             map.put("amount", detail.getAmount().abs()); //变更数量
             map.put("blanceAmount", ""); //余额
             map.put("createTime", DateUtil.dateToString(detail.getCreateTime()));
+            map.put("remark", detail.getRemark());
             result.add(map);
         }
         
         return Result.successResult("查询成功", result);
     }
 
+    /**
+     * 财务管理首页  查询美元点余额、奖金比可用余额
+     * @return
+     */
+    @RequestMapping(value = "/baseInfo", method = {RequestMethod.POST,RequestMethod.GET})
+    public Result<?> baseInfo(){
+    	 Integer userId = getUserId();
+    	 logger.info("查询用户" + userId + ",财务首页");
+    	 UserAccountDo userAccountDo = accountService.selectUserAccount(userId,AccountType.point.name());
+    	 Map<String,Object> result = new HashMap<String,Object>();
+    	 result.put("pointAmount", userAccountDo.getPointAmount());
+    	 
+    	 //TODO
+    	 result.put("coinAmount", "121.09");
+    	 
+    	 return Result.successResult("查询成功",result);
+    }
+    
+    @RequestMapping(value = "/ethereum", method = {RequestMethod.POST,RequestMethod.GET})
+    public Result<?> ethereum(){
+    	//TODO
+    	Map<String,Object> resultMap = new HashMap<String,Object>();
+    	resultMap.put("ethereumNum", "21.29");
+    	resultMap.put("totalIncome", "66.89");
+    	return Result.successResult("查询成功!",resultMap);
+    }
+    @RequestMapping(value = "/ethereumOut", method = {RequestMethod.POST,RequestMethod.GET})
+    public Result<?> ethereumOut(){
+    	//TODO
+    	String receiver = getString("receiver");
+    	String qty = getString("qty");
+    	logger.info("转出以太坊: receiver=" + receiver + ",qty=" + qty);
+    	return Result.successResult("转出成功");
+    }
+    
+    @RequestMapping(value = "/ethereumToCash", method = {RequestMethod.POST,RequestMethod.GET})
+    public Result<?> ethereumToCash(){
+    	//TODO
+    	String transPassWord = getString("transPassWord");
+    	String qty = getString("qty");
+    	logger.info("以太坊提现: transPassWord=" + transPassWord + ",qty=" + qty);
+    	return Result.successResult("提现成功");
+    }
+    
 }
