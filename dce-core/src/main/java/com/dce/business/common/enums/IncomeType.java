@@ -41,7 +41,7 @@ public enum IncomeType {
     /**
      * 量碰奖励
      */
-    TYPE_AWARD_LIANGPENG(321, "量碰奖励");
+    TYPE_AWARD_TOUCH(331, "量碰奖励");
 
     private int incomeType;
     private String remark;

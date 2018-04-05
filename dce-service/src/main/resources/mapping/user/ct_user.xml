@@ -45,6 +45,7 @@
 		<result column="yf_money" jdbcType="DECIMAL" property="yfMoney" />
 		<result column="fd_money" jdbcType="DECIMAL" property="fdMoney" />
 		<result column="total_performance" jdbcType="DECIMAL" property="totalPerformance" />
+		<result column="touched_performance" jdbcType="DECIMAL" property="touchedPerformance" />
 		<result column="activation_time" jdbcType="INTEGER" property="activationTime" />
 		<result column="user_qq" jdbcType="INTEGER" property="userQq" />
 		<result column="user_wechat" jdbcType="VARCHAR" property="userWechat" />
@@ -99,7 +100,7 @@
 		forzen_shopping, total_bonus, total_repeat, total_cash, total_integral, total_shopping,
 		refereeid, parentid, referee_number, referee_status, son_number, is_server_center,
 		my_server_center, userScore, user_type, user_group, user_level, user_post, reg_money,
-		yf_money, fd_money, total_performance, activation_time, user_qq, user_wechat,
+		yf_money, fd_money, total_performance,touched_performance, activation_time, user_qq, user_wechat,
 		openid, register, express_password, total_dividends, dividends_days, country, province,
 		city, darea, balance_et, idnumber, banktype, bank_user_name, banknumber, bank_content,
 		question1, question2, question3, answer1, answer2, answer3, groupid, ticket, balance_gouwu,
@@ -137,7 +138,7 @@
 		son_number, is_server_center, my_server_center,
 		userScore, user_type, user_group,
 		user_level, user_post, reg_money,
-		yf_money, fd_money, total_performance,
+		yf_money, fd_money, total_performance,touched_performance,
 		activation_time, user_qq, user_wechat,
 		openid, register, express_password,
 		total_dividends, dividends_days, country,
@@ -166,7 +167,7 @@
 		#{sonNumber,jdbcType=TINYINT}, #{isServerCenter,jdbcType=TINYINT}, #{myServerCenter,jdbcType=INTEGER},
 		#{userscore,jdbcType=INTEGER}, #{userType,jdbcType=TINYINT}, #{userGroup,jdbcType=TINYINT},
 		#{userLevel,jdbcType=TINYINT}, #{userPost,jdbcType=TINYINT}, #{regMoney,jdbcType=DECIMAL},
-		#{yfMoney,jdbcType=DECIMAL}, #{fdMoney,jdbcType=DECIMAL}, #{totalPerformance,jdbcType=DECIMAL},
+		#{yfMoney,jdbcType=DECIMAL}, #{fdMoney,jdbcType=DECIMAL}, #{totalPerformance,jdbcType=DECIMAL}, #{touchedPerformance,jdbcType=DECIMAL},
 		#{activationTime,jdbcType=INTEGER}, #{userQq,jdbcType=INTEGER}, #{userWechat,jdbcType=VARCHAR},
 		#{openid,jdbcType=VARCHAR}, #{register,jdbcType=VARCHAR}, #{expressPassword,jdbcType=VARCHAR},
 		#{totalDividends,jdbcType=DECIMAL}, #{dividendsDays,jdbcType=INTEGER}, #{country,jdbcType=INTEGER},
@@ -313,6 +314,9 @@
 			<if test="totalPerformance != null">
 				total_performance,
 			</if>
+			<if test="touchedPerformance != null">
+                touched_performance,
+            </if>
 			<if test="activationTime != null">
 				activation_time,
 			</if>
@@ -573,6 +577,9 @@
 			<if test="totalPerformance != null">
 				#{totalPerformance,jdbcType=DECIMAL},
 			</if>
+			<if test="touchedPerformance != null">
+                #{touchedPerformance,jdbcType=DECIMAL},
+            </if>
 			<if test="activationTime != null">
 				#{activationTime,jdbcType=INTEGER},
 			</if>
@@ -836,6 +843,9 @@
 			<if test="totalPerformance != null">
 				total_performance = #{totalPerformance,jdbcType=DECIMAL},
 			</if>
+			<if test="touchedPerformance != null">
+                touched_performance = #{touchedPerformance,jdbcType=DECIMAL},
+            </if>
 			<if test="activationTime != null">
 				activation_time = #{activationTime,jdbcType=INTEGER},
 			</if>
@@ -1015,6 +1025,7 @@
 		yf_money = #{yfMoney,jdbcType=DECIMAL},
 		fd_money = #{fdMoney,jdbcType=DECIMAL},
 		total_performance = #{totalPerformance,jdbcType=DECIMAL},
+		touched_performance = #{touchedPerformance,jdbcType=DECIMAL},
 		activation_time = #{activationTime,jdbcType=INTEGER},
 		user_qq = #{userQq,jdbcType=INTEGER},
 		user_wechat = #{userWechat,jdbcType=VARCHAR},
@@ -1105,6 +1116,7 @@
 		yf_money = #{yfMoney,jdbcType=DECIMAL},
 		fd_money = #{fdMoney,jdbcType=DECIMAL},
 		total_performance = #{totalPerformance,jdbcType=DECIMAL},
+		touched_performance = #{touchedPerformance,jdbcType=DECIMAL},
 		activation_time = #{activationTime,jdbcType=INTEGER},
 		user_qq = #{userQq,jdbcType=INTEGER},
 		user_wechat = #{userWechat,jdbcType=VARCHAR},
@@ -1160,6 +1172,9 @@
            <if test="userName != null">  
                AND user_name = #{userName}
            </if>
+           <if test="parentid != null">  
+               AND parentid = #{parentid}
+           </if>
         </trim> 
     </select>
     
@@ -1176,5 +1191,9 @@
     
     <update id="updateStatic" parameterType="java.util.Map">
         update ct_user set allStatic = allStatic+#{staticAmount} where id=#{userId}
+    </update>
+    
+    <update id="updateTouched" parameterType="java.util.Map">
+        update ct_user set touched_performance = touched_performance+#{touchedAmount} where id=#{userId}
     </update>
 </mapper>

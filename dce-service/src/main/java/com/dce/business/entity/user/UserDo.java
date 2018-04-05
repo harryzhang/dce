@@ -101,6 +101,8 @@ public class UserDo {
 
     private BigDecimal totalPerformance;
 
+    private BigDecimal touchedPerformance;
+
     private Integer activationTime;
 
     private Integer userQq;
@@ -899,5 +901,13 @@ public class UserDo {
 
     public void setParentUserName(String parentUserName) {
         this.parentUserName = parentUserName;
+    }
+
+    public BigDecimal getTouchedPerformance() {
+        return touchedPerformance;
+    }
+
+    public void setTouchedPerformance(BigDecimal touchedPerformance) {
+        this.touchedPerformance = touchedPerformance;
     }
 }
