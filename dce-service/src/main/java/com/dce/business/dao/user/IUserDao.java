@@ -19,10 +19,12 @@ public interface IUserDao {
     int updateByPrimaryKeyWithBLOBs(UserDo record);
 
     int updateByPrimaryKey(UserDo record);
-    
+
     List<UserDo> selectUser(Map<String, Object> params);
-    
+
     List<UserDo> list(Map<String, Object> params);
-    
+
     void updateStatic(Map<String, Object> params);
+
+    void updateTouched(Map<String, Object> params);
 }

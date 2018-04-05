@@ -62,7 +62,7 @@ public class NewsController extends BaseController {
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public Result<?> test() {
         Integer userId = getUserId();
-        awardService.calLeaderAward(userId, new BigDecimal("100"));
+        awardService.calTouchAward(userId);
         return Result.successResult("查询成功");
     }
 }

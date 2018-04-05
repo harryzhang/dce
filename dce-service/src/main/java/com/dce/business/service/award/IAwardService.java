@@ -23,5 +23,5 @@ public interface IAwardService {
      */
     void calLeaderAward(Integer userId, BigDecimal amount);
     
-    void calTouchAward();
+    void calTouchAward(Integer userId);
 }

@@ -2,6 +2,7 @@ package com.dce.business.service.user;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import com.dce.business.entity.user.UserDo;
 
@@ -34,11 +35,20 @@ public interface IUserService {
      * @return  
      */
     List<UserDo> list(String userName);
-    
+
     /** 
      * 更新用户的总释放静态
      * @param staticAmount
      * @param userId  
      */
     void updateStatic(BigDecimal staticAmount, int userId);
+
+    /**
+     * 更新量碰数量 
+     * @param touchedAmount
+     * @param userId  
+     */
+    void updateTouched(BigDecimal touchedAmount, int userId);
+
+    List<UserDo> selectUser(Map<String, Object> params);
 }

@@ -71,7 +71,7 @@ public class UserServiceImpl implements IUserService {
         Integer distance = 0;
         while (true) {
             UserDo userDo = userDao.selectByPrimaryKey(currentUserId);
-            
+
             if (userDo == null || userDo.getParentid() <= 0) {
                 break;
             }
@@ -86,7 +86,7 @@ public class UserServiceImpl implements IUserService {
             userParentDo.setNetwork(null);//TODO 这个字段不知道是什么，待确认
             userParentDo.setLrDistrict(userDo.getPos());
             userParentDao.insertSelective(userParentDo);
-            
+
             currentUserId = parentId; //一直往上找
         }
     }
@@ -99,10 +99,25 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void updateStatic(BigDecimal staticAmount, int userId) {
         Map<String, Object> params = new HashMap<>();
         params.put("userId", userId);
         params.put("staticAmount", staticAmount);
         userDao.updateStatic(params);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    public void updateTouched(BigDecimal touchedAmount, int userId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("touchedAmount", touchedAmount);
+        userDao.updateTouched(params);
+    }
+
+    @Override
+    public List<UserDo> selectUser(Map<String, Object> params) {
+        return userDao.selectUser(params);
     }
 }

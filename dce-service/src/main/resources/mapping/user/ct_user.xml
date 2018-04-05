@@ -1172,6 +1172,9 @@
            <if test="userName != null">  
                AND user_name = #{userName}
            </if>
+           <if test="parentid != null">  
+               AND parentid = #{parentid}
+           </if>
         </trim> 
     </select>
     
@@ -1188,5 +1191,9 @@
     
     <update id="updateStatic" parameterType="java.util.Map">
         update ct_user set allStatic = allStatic+#{staticAmount} where id=#{userId}
+    </update>
+    
+    <update id="updateTouched" parameterType="java.util.Map">
+        update ct_user set touched_performance = touched_performance+#{touchedAmount} where id=#{userId}
     </update>
 </mapper>
