@@ -28,7 +28,7 @@ import com.dce.business.service.account.IAccountService;
  * @version v1.0
  */
 @RestController
-@RequestMapping("/mall")
+@RequestMapping("/mall2")
 public class MallController extends BaseController {
     private final static Logger logger = Logger.getLogger(MallController.class);
 

@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.dce.business.common.enums.IncomeType;
 import com.dce.business.common.exception.BusinessException;
+import com.dce.business.common.result.Result;
 import com.dce.business.dao.account.IUserAccountDao;
 import com.dce.business.dao.account.IUserAccountDetailDao;
 import com.dce.business.entity.account.UserAccountDetailDo;
@@ -35,6 +37,9 @@ public class AccountServiceImpl implements IAccountService {
     @Resource
     private IUserAccountDetailDao userAccountDetailDao;
 
+    @Value("#{sysconfig['huishang.openAccount.url']}")
+    private String ethereum_blance_url;
+    
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public boolean createAccount(UserAccountDo userAccountDo) {
@@ -166,4 +171,10 @@ public class AccountServiceImpl implements IAccountService {
     public List<UserAccountDetailDo> selectUserAccountDetail(Map<String, Object> params) {
         return userAccountDetailDao.selectUserAccountDetail(params);
     }
+
+	@Override
+	public Result<?> selectEthereum(Integer userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

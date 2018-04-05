@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.dce.business.common.enums.IncomeType;
+import com.dce.business.common.result.Result;
 import com.dce.business.entity.account.UserAccountDetailDo;
 import com.dce.business.entity.account.UserAccountDo;
 
@@ -28,5 +29,5 @@ public interface IAccountService {
     
     List<UserAccountDetailDo> selectUserAccountDetail(Map<String, Object> params);
     
-    
+    Result<?> selectEthereum(Integer userId);
 }

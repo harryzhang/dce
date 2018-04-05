@@ -180,4 +180,18 @@ public class OrderController extends BaseController {
     		return Result.failureResult("撤销订单失败!");
     	}
     }
+    
+    /**
+     * 报单
+     * @return
+     */
+    @RequestMapping(value = "/baodan", method = RequestMethod.POST)
+    public Result<?> baodan(){
+    	String qty = getString("qty");
+    	String buyType = getString("buyType");
+    	logger.info("报单：qty=" + qty + ",buyType=" + buyType);
+    	//TODO
+    	
+    	return Result.successResult("报单成功");
+    }
 }
