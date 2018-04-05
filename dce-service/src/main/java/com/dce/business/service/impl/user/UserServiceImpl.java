@@ -55,7 +55,6 @@ public class UserServiceImpl implements IUserService {
         //用户注册
         int result = userDao.insertSelective(userDo);
 
-        //TODO
         //更新推荐人
         UserDo referee = getUser(userDo.getRefereeid());
         Integer refereeNumber = referee.getRefereeNumber() == null ? 0 : referee.getRefereeNumber();
