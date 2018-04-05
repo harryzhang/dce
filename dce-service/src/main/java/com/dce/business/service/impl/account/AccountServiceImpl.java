@@ -15,13 +15,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import com.dce.business.common.enums.AccountType;
 import com.dce.business.common.enums.IncomeType;
 import com.dce.business.common.exception.BusinessException;
 import com.dce.business.common.result.Result;
 import com.dce.business.dao.account.IUserAccountDao;
 import com.dce.business.dao.account.IUserAccountDetailDao;
+import com.dce.business.dao.user.IUserDao;
 import com.dce.business.entity.account.UserAccountDetailDo;
 import com.dce.business.entity.account.UserAccountDo;
+import com.dce.business.entity.user.UserDo;
 import com.dce.business.service.account.IAccountService;
 
 /** 
@@ -36,7 +39,9 @@ public class AccountServiceImpl implements IAccountService {
     private IUserAccountDao userAccountDao;
     @Resource
     private IUserAccountDetailDao userAccountDetailDao;
-
+    @Resource
+    private IUserDao userDao;
+    
     @Value("#{sysconfig['huishang.openAccount.url']}")
     private String ethereum_blance_url;
     
@@ -176,5 +181,29 @@ public class AccountServiceImpl implements IAccountService {
 	public Result<?> selectEthereum(Integer userId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Result<?> currentInit(Integer userId) {
+		if(userId == null){
+			return Result.failureResult("用户ID为空!");
+		}
+		
+		Map<String,Object> resultMap = new HashMap<String,Object>();
+		
+		UserDo user = userDao.selectByPrimaryKey(userId);
+		resultMap.put("userName", user.getUserName());
+		resultMap.put("userLevelName", StringUtils.isBlank(user.getUserLevelName())?user.getUserLevel():user.getUserLevelName());
+		
+		UserAccountDo account = selectUserAccount(userId, AccountType.current.name());
+		if(account != null){
+			
+			resultMap.put("amount", account.getAmount());
+		}else{
+			
+			resultMap.put("amount", "0.0");
+		}
+		
+		return Result.successResult("查询成功!", resultMap);
 	}
 }

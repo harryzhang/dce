@@ -190,6 +190,8 @@ public class UserDo {
     private Byte isout;
 
     private String touchDistance;
+    
+    private String userLevelName;
 
     public Integer getId() {
         return id;
@@ -910,4 +912,13 @@ public class UserDo {
     public void setTouchedPerformance(BigDecimal touchedPerformance) {
         this.touchedPerformance = touchedPerformance;
     }
+
+	public String getUserLevelName() {
+		return userLevelName;
+	}
+
+	public void setUserLevelName(String userLevelName) {
+		this.userLevelName = userLevelName;
+	}
+    
 }

@@ -30,4 +30,6 @@ public interface IAccountService {
     List<UserAccountDetailDo> selectUserAccountDetail(Map<String, Object> params);
     
     Result<?> selectEthereum(Integer userId);
+    
+    Result<?> currentInit(Integer userId);
 }

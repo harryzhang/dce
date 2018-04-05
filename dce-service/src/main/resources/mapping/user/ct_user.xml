@@ -93,31 +93,39 @@
 	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.dce.business.entity.user.UserDo">
 		<result column="touch_distance" jdbcType="LONGVARCHAR" property="touchDistance" />
 	</resultMap>
+	<resultMap extends="ResultMapWithBLOBs" id="LevelResultMapWithBLOBs" type="com.dce.business.entity.user.UserDo">
+		<result column="userLevelName" property="userLevelName" />
+	</resultMap>
 	<sql id="Base_Column_List">
-		id, user_name, true_name, email, mobile, user_password, two_password, user_face,
-		balance_integral, sex, login_times, last_login_time, last_login_ip, reg_ip, reg_time,
-		status, balance_bonus, balance_repeat, balance_cash, balance_dongjie, balance_shopping,
-		forzen_shopping, total_bonus, total_repeat, total_cash, total_integral, total_shopping,
-		refereeid, parentid, referee_number, referee_status, son_number, is_server_center,
-		my_server_center, userScore, user_type, user_group, user_level, user_post, reg_money,
-		yf_money, fd_money, total_performance,touched_performance, activation_time, user_qq, user_wechat,
-		openid, register, express_password, total_dividends, dividends_days, country, province,
-		city, darea, balance_et, idnumber, banktype, bank_user_name, banknumber, bank_content,
-		question1, question2, question3, answer1, answer2, answer3, groupid, ticket, balance_gouwu,
-		qrcode_status, bonus_time, is_empty, balance_heart, kuo_level, backfill_status, backfill_money,
-		backfill_sheng, guadan_num, allStatic, dis, release_time, isShop, isImport, pos,
-		isOut
+		u.id, u.user_name, u.true_name, u.email, u.mobile, u.user_password, u.two_password, u.user_face,
+		u.balance_integral, u.sex, u.login_times, u.last_login_time, u.last_login_ip, u.reg_ip, u.reg_time,
+		u.status, u.balance_bonus, u.balance_repeat, u.balance_cash, u.balance_dongjie, u.balance_shopping,
+		u.forzen_shopping, u.total_bonus, u.total_repeat, u.total_cash, u.total_integral, u.total_shopping,
+		u.refereeid, u.parentid, u.referee_number, u.referee_status, u.son_number, u.is_server_center,
+		u.my_server_center, u.userScore, u.user_type, u.user_group, u.user_level, u.user_post, u.reg_money,
+		u.yf_money, u.fd_money, u.total_performance,u.touched_performance, u.activation_time, u.user_qq, u.user_wechat,
+		u.openid, u.register, u.express_password, u.total_dividends, u.dividends_days, u.country, u.province,
+		u.city, u.darea, u.balance_et, u.idnumber, u.banktype, u.bank_user_name, u.banknumber, u.bank_content,
+		u.question1, u.question2, u.question3, u.answer1, u.answer2, u.answer3, u.groupid, u.ticket, u.balance_gouwu,
+		u.qrcode_status, u.bonus_time, u.is_empty, u.balance_heart, u.kuo_level, u.backfill_status, u.backfill_money,
+		u.backfill_sheng, u.guadan_num, u.allStatic, u.dis, u.release_time, u.isShop, u.isImport, u.pos,
+		u.isOut
 	</sql>
 	<sql id="Blob_Column_List">
-		touch_distance
+		u.touch_distance
 	</sql>
-	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+	<sql id="Level_Column_List">
+		le.`name` as userLevelName
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="LevelResultMapWithBLOBs">
 		select
 		<include refid="Base_Column_List" />
 		,
 		<include refid="Blob_Column_List" />
-		from ct_user
-		where id = #{id,jdbcType=INTEGER}
+		,
+		<include refid="Level_Column_List" />
+		from ct_user u LEFT JOIN ct_user_level le ON u.user_level=le.identification
+		where u.id = #{id,jdbcType=INTEGER}
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
 		delete from ct_user
@@ -1167,13 +1175,13 @@
 	<select id="selectUser" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
-        from ct_user
+        from ct_user u
         <trim prefix="WHERE" prefixOverrides="AND |OR "> 
            <if test="userName != null">  
-               AND user_name = #{userName}
+               AND u.user_name = #{userName}
            </if>
            <if test="parentid != null">  
-               AND parentid = #{parentid}
+               AND u.parentid = #{parentid}
            </if>
         </trim> 
     </select>

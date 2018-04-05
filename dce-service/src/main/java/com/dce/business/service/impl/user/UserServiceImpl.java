@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.dce.business.common.exception.BusinessException;
+import com.dce.business.common.result.Result;
 import com.dce.business.dao.user.IUserDao;
 import com.dce.business.dao.user.IUserParentDao;
 import com.dce.business.entity.user.UserDo;
@@ -119,4 +120,18 @@ public class UserServiceImpl implements IUserService {
     public List<UserDo> selectUser(Map<String, Object> params) {
         return userDao.selectUser(params);
     }
+
+	@Override
+	public Result<?> update(UserDo userDo) {
+		if(userDo == null || userDo.getId() == null){
+			return Result.failureResult("修改用户信息参数错误!");
+		}
+		int flag = userDao.updateByPrimaryKeySelective(userDo);
+		if(flag > 0){
+			return Result.successResult("修改成功");
+		}else{
+			
+			return Result.failureResult("修改失败");
+		}
+	}
 }
