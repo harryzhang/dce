@@ -1,9 +1,12 @@
 package com.dce.business.actions.news;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dce.business.actions.common.BaseController;
 import com.dce.business.common.result.Result;
+import com.dce.business.service.award.IAwardService;
 
 /** 
  * 新闻公告、消息列表
@@ -23,6 +27,8 @@ import com.dce.business.common.result.Result;
 @RequestMapping("/news")
 public class NewsController extends BaseController {
     private final static Logger logger = Logger.getLogger(NewsController.class);
+    @Resource
+    private IAwardService awardService;
 
     /** 
      * 新闻公告列表
@@ -47,5 +53,16 @@ public class NewsController extends BaseController {
         result.add(map);
 
         return Result.successResult("查询成功", result);
+    }
+
+    /** 
+     * 测试
+     * @return  
+     */
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public Result<?> test() {
+        Integer userId = getUserId();
+        awardService.calLeaderAward(userId, new BigDecimal("100"));
+        return Result.successResult("查询成功");
     }
 }

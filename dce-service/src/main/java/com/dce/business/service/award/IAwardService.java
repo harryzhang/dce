@@ -15,4 +15,6 @@ public interface IAwardService {
      * @param amount  
      */
     void calRecommendAward(Integer userId, BigDecimal amount);
+    
+    void calLeaderAward(Integer userId, BigDecimal amount);
 }

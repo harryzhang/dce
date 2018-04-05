@@ -98,9 +98,49 @@ public class AwardServiceImpl implements IAwardService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void calRecommendAward(Integer userId, BigDecimal amount) {
         UserDo userDo = userService.getUser(userId);
 
+        BigDecimal award = calRecommendAward(userDo, amount);
+        UserAccountDo accountDo = new UserAccountDo();
+        accountDo.setUserId(userDo.getRefereeid());
+        accountDo.setAmount(award);
+        accountDo.setAccountType(AccountType.current.getAccountType());
+        accountService.updateUserAmountById(accountDo, IncomeType.TYPE_AWARD_REFEREE);
+    }
+
+    @Override
+    public void calLeaderAward(Integer userId, BigDecimal amount) {
+        UserDo userDo = userService.getUser(userId);
+
+        Integer refereeId = userDo.getRefereeid(); //推荐人
+
+        //推荐奖
+        BigDecimal award = calRecommendAward(userDo, amount);
+        //领导奖
+        BigDecimal leaderAward = award.multiply(new BigDecimal("0.03")).setScale(4, RoundingMode.HALF_UP);
+
+        UserDo refereeDO = userService.getUser(refereeId);
+        Integer parentId = refereeDO.getParentid();
+        //计算推荐人的五代领导奖
+        for (int i = 0; i < 5; i++) {
+            UserDo parentDo = userService.getUser(parentId);
+            if (parentDo == null) {
+                break;
+            }
+
+            UserAccountDo accountDo = new UserAccountDo();
+            accountDo.setUserId(parentId);
+            accountDo.setAmount(leaderAward);
+            accountDo.setAccountType(AccountType.current.getAccountType());
+            accountService.updateUserAmountById(accountDo, IncomeType.TYPE_AWARD_LEADER);
+            
+            parentId = parentDo.getParentid();
+        }
+    }
+
+    private BigDecimal calRecommendAward(UserDo userDo, BigDecimal amount) {
         Integer refereeId = userDo.getRefereeid(); //推荐人
         UserDo refereeDo = userService.getUser(refereeId);
 
@@ -118,11 +158,6 @@ public class AwardServiceImpl implements IAwardService {
             award = amount.multiply(new BigDecimal("0.1")).setScale(4, RoundingMode.HALF_UP);
         }
 
-        UserAccountDo accountDo = new UserAccountDo();
-        accountDo.setUserId(refereeId);
-        accountDo.setAmount(award);
-        accountDo.setAccountType(AccountType.current.getAccountType());
-        accountService.updateUserAmountById(accountDo, IncomeType.TYPE_AWARD_REFEREE);
+        return award;
     }
-
 }
