@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import com.dce.business.common.result.Result;
 import com.dce.business.entity.user.UserDo;
 
 public interface IUserService {
@@ -51,4 +52,6 @@ public interface IUserService {
     void updateTouched(BigDecimal touchedAmount, int userId);
 
     List<UserDo> selectUser(Map<String, Object> params);
+    
+    Result<?> update(UserDo userDo);
 }

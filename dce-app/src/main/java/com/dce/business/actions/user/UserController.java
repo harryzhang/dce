@@ -219,10 +219,20 @@ public class UserController extends BaseController {
         Assert.hasText(bankUserName, "开户名不能为空");
         Assert.hasText(banknumber, "银行卡号不能为空");
         Assert.hasText(bankContent, "支行不能为空");
+        
         //用户信息
-        UserDo userDo = userService.getUser(userId);
-
-        return Result.successResult("成功");
+        UserDo userDo = new UserDo();
+        userDo.setId(userId);
+        userDo.setTrueName(trueName);
+        userDo.setMobile(mobile);
+        userDo.setEmail(email);
+        userDo.setIdnumber(idnumber);
+        userDo.setBanktype(Byte.parseByte(banktype));
+        userDo.setBankUserName(bankUserName);
+        userDo.setBanknumber(banknumber);
+        userDo.setBankContent(bankContent);
+        
+        return userService.update(userDo);
     }
 
     /**   

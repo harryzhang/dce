@@ -169,6 +169,15 @@ public class AccountController extends BaseController {
     }
     
     /**
+     * 原始仓加金、复投 | 报单初始化
+     * @return
+     */
+    @RequestMapping(value = "/currentInit", method = RequestMethod.GET)
+    public Result<?> currentInit(){
+    	Integer userId = getUserId();
+    	return accountService.currentInit(userId);
+    }
+    /**
      * 现持仓加金
      * @return
      */
