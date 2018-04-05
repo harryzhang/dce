@@ -10,40 +10,40 @@ public enum IncomeType {
     /**
      * 静态释放
      */
-    TYPE_STATIC("1", "静态释放"),
+    TYPE_STATIC(1, "静态释放"),
     /** 
      * 购买订单
      * @return  
      */
-    TYPE_PURCHASE("11", "购买订单"),
+    TYPE_PURCHASE(12, "购买订单"),
     /** 
      * 卖出订单
      * @return  
      */
-    TYPE_SELL("12", "卖出订单"),
+    TYPE_SELL(11, "卖出订单"),
     /** 
      * 充值
      * @return  
      */
-    TYPE_RECHARGE("21", "充值"),
+    TYPE_RECHARGE(21, "充值"),
     /**
      * 提现
      */
-    TYPE_WITHDRAW("22", "提现");
+    TYPE_WITHDRAW(22, "提现");
 
-    private String incomeType;
+    private int incomeType;
     private String remark;
 
-    IncomeType(String incomeType, String remark) {
+    IncomeType(int incomeType, String remark) {
         this.incomeType = incomeType;
         this.remark = remark;
     }
 
-    public String getIncomeTypee() {
+    public int getIncomeType() {
         return incomeType;
     }
 
-    public void setIncomeType(String incomeType) {
+    public void setIncomeType(int incomeType) {
         this.incomeType = incomeType;
     }
 

@@ -2,5 +2,8 @@ package com.dce.business.service.award;
 
 public interface IAwardService {
 
-    void cal
+    /**
+     * 计算静态释放奖励   
+     */
+    void calStatic();
 }

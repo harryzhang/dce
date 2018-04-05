@@ -1,7 +1,6 @@
 package com.dce.business.common.util;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,6 +30,18 @@ public final class DateUtil {
             calendar.set(Calendar.HOUR_OF_DAY, hour);
         } else if (hour != null && hour != 0) {
             calendar.add(Calendar.HOUR_OF_DAY, hour);
+        }
+        if (day != null) {
+            calendar.add(Calendar.DATE, day);
+        }
+
+        return calendar.getTime();
+    }
+    
+    public static Date getDate(Date date, Integer day) {
+        Calendar calendar = Calendar.getInstance();
+        if (date != null) {
+            calendar.setTime(date);
         }
         if (day != null) {
             calendar.add(Calendar.DATE, day);

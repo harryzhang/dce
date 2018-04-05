@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -22,6 +23,7 @@ import com.dce.business.common.token.TokenUtil;
 import com.dce.business.entity.account.UserAccountDo;
 import com.dce.business.entity.user.UserDo;
 import com.dce.business.service.account.IAccountService;
+import com.dce.business.service.award.IAwardService;
 import com.dce.business.service.user.IUserService;
 
 /** 
@@ -39,6 +41,8 @@ public class UserController extends BaseController {
     private IUserService userService;
     @Resource
     private IAccountService accountService;
+    @Resource
+    private IAwardService awardService;
 
     /** 
      * 用户注册
@@ -219,5 +223,13 @@ public class UserController extends BaseController {
         UserDo userDo = userService.getUser(userId);
 
         return Result.successResult("成功");
+    }
+
+    /**   
+     * 每天0点计算
+     */
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void calKLine() {
+        awardService.calStatic();
     }
 }

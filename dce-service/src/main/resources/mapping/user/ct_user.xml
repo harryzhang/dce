@@ -1173,4 +1173,8 @@
         </trim> 
         limit 10
     </select>
+    
+    <update id="updateStatic" parameterType="java.util.Map">
+        update ct_user set allStatic = allStatic+#{staticAmount} where id=#{userId}
+    </update>
 </mapper>

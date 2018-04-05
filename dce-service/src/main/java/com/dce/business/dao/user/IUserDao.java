@@ -23,4 +23,6 @@ public interface IUserDao {
     List<UserDo> selectUser(Map<String, Object> params);
     
     List<UserDo> list(Map<String, Object> params);
+    
+    void updateStatic(Map<String, Object> params);
 }

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dce.business.dao.account.IUserAccountOrderDao">
+	<resultMap id="BaseResultMap" type="com.dce.business.entity.account.UserAccountOrderDo">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="userId" jdbcType="INTEGER" property="userid" />
+		<result column="amount" jdbcType="DECIMAL" property="amount" />
+		<result column="accountType" jdbcType="VARCHAR" property="accounttype" />
+		<result column="orderType" jdbcType="INTEGER" property="ordertype" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, userId, amount, accountType, orderType, createTime
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ct_user_account_order
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from ct_user_account_order
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.dce.business.entity.account.UserAccountOrderDo"
+		useGeneratedKeys="true">
+		insert into ct_user_account_order (userId, amount, accountType,
+		orderType, createTime)
+		values
+		(#{userid,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{accounttype,jdbcType=VARCHAR},
+		#{ordertype,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.dce.business.entity.account.UserAccountOrderDo"
+		useGeneratedKeys="true">
+		insert into ct_user_account_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				userId,
+			</if>
+			<if test="amount != null">
+				amount,
+			</if>
+			<if test="accounttype != null">
+				accountType,
+			</if>
+			<if test="ordertype != null">
+				orderType,
+			</if>
+			<if test="createtime != null">
+				createTime,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				#{userid,jdbcType=INTEGER},
+			</if>
+			<if test="amount != null">
+				#{amount,jdbcType=DECIMAL},
+			</if>
+			<if test="accounttype != null">
+				#{accounttype,jdbcType=VARCHAR},
+			</if>
+			<if test="ordertype != null">
+				#{ordertype,jdbcType=INTEGER},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.dce.business.entity.account.UserAccountOrderDo">
+		update ct_user_account_order
+		<set>
+			<if test="userid != null">
+				userId = #{userid,jdbcType=INTEGER},
+			</if>
+			<if test="amount != null">
+				amount = #{amount,jdbcType=DECIMAL},
+			</if>
+			<if test="accounttype != null">
+				accountType = #{accounttype,jdbcType=VARCHAR},
+			</if>
+			<if test="ordertype != null">
+				orderType = #{ordertype,jdbcType=INTEGER},
+			</if>
+			<if test="createtime != null">
+				createTime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.dce.business.entity.account.UserAccountOrderDo">
+		update ct_user_account_order
+		set userId =
+		#{userid,jdbcType=INTEGER},
+		amount = #{amount,jdbcType=DECIMAL},
+		accountType = #{accounttype,jdbcType=VARCHAR},
+		orderType = #{ordertype,jdbcType=INTEGER},
+		createTime = #{createtime,jdbcType=TIMESTAMP}
+		where id =
+		#{id,jdbcType=BIGINT}
+	</update>
+	
+	<!-- 自定义查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ct_user_account_order
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="userId != null">
+                AND userId = #{userId}
+            </if>
+            <if test="accountType != null">
+                AND accountType = #{accountType}
+            </if>
+            <if test="orderType != null">
+                AND orderType = #{orderType}
+            </if>
+            <if test="startTime != null">
+                AND <![CDATA[    AND DATE_FORMAT(startTime,'%Y-%m-%d %H:%i:%s') >
+                '${endDate}']]>
+            </if>
+        </trim>
+        <if test="offset != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+</mapper>

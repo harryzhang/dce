@@ -1,5 +1,6 @@
 package com.dce.business.service.impl.user;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,5 +58,13 @@ public class UserServiceImpl implements IUserService {
         Map<String, Object> params = new HashMap<>();
         params.put("userName", userName);
         return userDao.list(params);
+    }
+
+    @Override
+    public void updateStatic(BigDecimal staticAmount, int userId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("staticAmount", staticAmount);
+        userDao.updateStatic(params);
     }
 }
