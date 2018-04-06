@@ -28,7 +28,7 @@ public class OrderServiceImpl implements IOrderService {
     private IAccountService accountService;
     @Resource
     private IKLineDao kLineDao;
-
+     
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public Long addOrder(OrderDo orderDo) {
@@ -93,11 +93,11 @@ public class OrderServiceImpl implements IOrderService {
         return orderDao.selectOrder(params);
     }
 
-	@Override
-	public int updateOrder(OrderDo orderDo) {
-		if(orderDo == null){
-			return 0;
-		}
-		return orderDao.updateByPrimaryKeySelective(orderDo);
-	}
+    @Override
+    public int updateOrder(OrderDo orderDo) {
+        if (orderDo == null) {
+            return 0;
+        }
+        return orderDao.updateByPrimaryKeySelective(orderDo);
+    }
 }

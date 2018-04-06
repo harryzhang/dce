@@ -21,11 +21,12 @@ import com.dce.business.actions.common.BaseController;
 import com.dce.business.common.result.Result;
 import com.dce.business.common.util.DateUtil;
 import com.dce.business.entity.account.UserAccountDo;
+import com.dce.business.entity.order.OrderDo;
 import com.dce.business.entity.trade.TradeDo;
 import com.dce.business.entity.trade.TradeMarketDo;
 import com.dce.business.service.account.IAccountService;
+import com.dce.business.service.order.IOrderService;
 import com.dce.business.service.trade.ITradeMarketService;
-import com.dce.business.service.trade.ITradeService;
 
 /** 
  * 交易
@@ -38,12 +39,14 @@ import com.dce.business.service.trade.ITradeService;
 public class TradeController extends BaseController {
     private final static Logger logger = Logger.getLogger(TradeController.class);
 
-    @Resource
-    private ITradeService tradeService;
+    //@Resource
+    //private ITradeService tradeService;
     @Resource
     private IAccountService accountService;
     @Resource
     private ITradeMarketService tradeMarketService;
+    @Resource
+    private IOrderService orderService;
 
     /** 
      * 查询交易明细
@@ -52,10 +55,14 @@ public class TradeController extends BaseController {
     @RequestMapping(value = "/records", method = RequestMethod.POST)
     public Result<?> getTradeRecords() {
         Integer userId = getUserId();
-        
+
         logger.info("查询交易明细, userId:" + userId);
 
-        List<TradeDo> list = tradeService.getTradeRecords(userId);
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("orderStatus", 2); //已成交
+        List<OrderDo> list = orderService.selectOrder(params);
+        //List<TradeDo> list = tradeService.getTradeRecords(userId);
 
         return Result.successResult("查询成功", convertTradeInfo(list));
     }
@@ -120,20 +127,21 @@ public class TradeController extends BaseController {
         return Result.successResult("购买成功");
     }
 
-    private List<Map<String, Object>> convertTradeInfo(List<TradeDo> list) {
+    private List<Map<String, Object>> convertTradeInfo(List<OrderDo> list) {
         List<Map<String, Object>> result = new ArrayList<>();
-        for (TradeDo tradeDo : list) {
+        for (OrderDo orderDo : list) {
             Map<String, Object> map = new HashMap<>();
-            if (tradeDo.getCtime() != null) {
-                String time = tradeDo.getCtime().toString();
-                if (time.length() == 10) {
-                    time = time + "000";
-                }
-                map.put("time", DateUtil.dateToString(new Date(Long.valueOf(time)))); //成交时间
-            }
-            map.put("price", tradeDo.getPrice()); //单价
-            map.put("num", tradeDo.getNum()); //成交量
-            map.put("totalmoney", tradeDo.getTotalmoney()); //总金额
+            //            if (tradeDo.getCtime() != null) {
+            //                String time = tradeDo.getCtime().toString();
+            //                if (time.length() == 10) {
+            //                    time = time + "000";
+            //                }
+            //                map.put("time", DateUtil.dateToString(new Date(Long.valueOf(time)))); //成交时间
+            //            }
+            map.put("time", DateUtil.dateToString(orderDo.getCreateTime()));
+            map.put("price", orderDo.getPrice()); //单价
+            map.put("num", orderDo.getQty()); //成交量
+            map.put("totalmoney", orderDo.getTotalPrice()); //总金额
             result.add(map);
         }
 
